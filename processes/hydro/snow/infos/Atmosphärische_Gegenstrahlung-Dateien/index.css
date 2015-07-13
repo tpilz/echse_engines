@@ -1,0 +1,78 @@
+/* <source lang="css"> */
+
+/* CSS an dieser Stelle wirkt sich auf den Vector-Skin aus. Für allgemeingültige Skin-Anpassungen bitte [[MediaWiki:Common.css]] bearbeiten. */
+
+/* Für Vector-Skin-Benutzer irrelevante Informationen in  MediaWiki:Preferences-summary ausblenden */
+div.oldskinonly {
+	display: none;
+}
+
+/* Vermeide hässliche weiße Ränder bei Float-Objekten auf nicht-weißen Hintergründen. */
+div.thumb {
+	border: none;
+}
+div.tright {
+	margin: 0.5em 0 0.8em 1.4em;
+}
+div.tleft {
+	margin: 0.5em 1.4em 0.8em 0;
+}
+
+/* Koordinaten in Artikeln oben rechts */
+#coordinates,
+#editcount,
+#issnlink,
+#shortcut {
+	display: block;
+	font-size: 10px;
+	line-height: 11px;
+	position: absolute;
+	right: 0;
+	text-align: right;
+	text-indent: 0;
+	top: -1.4em;
+	white-space: nowrap;
+}
+
+/* Spezialseiten */
+.sp-cached {
+	background: #ffffe0 url(http://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Clock_and_warning.svg/20px-Clock_and_warning.svg) no-repeat 5px 3px;
+	border: 1px solid #eeee80;
+	color: #606000;
+	font-style: italic;
+	margin: 0.3em 0;
+	padding: 4px 0 4px 30px;
+}
+
+/* Auszeichnung lesenswerter und exzellenter Artikel in anderen Sprachen */
+#p-lang li.FA {
+	background: url("http://upload.wikimedia.org/wikipedia/commons/d/d0/Monobook-bullet-star-transparent.png") no-repeat;
+	list-style-image: none; /* Übersteuern der Common.css notwendig */
+	margin-left: -10px !important;
+	padding-left: 10px !important;
+}
+#p-lang li.GA {
+	background: url("http://upload.wikimedia.org/wikipedia/commons/a/a1/Monobook-bullet-star-gray.png") no-repeat;
+	list-style-image: none; /* Übersteuern der Common.css notwendig */
+	margin-left: -10px !important;
+	padding-left: 10px !important;
+}
+
+/* Vervollständigung für [[rev:69336]] bzw. [[bugzilla:20706]] */
+kbd,
+samp {
+	font-family: monospace, "Courier New";
+}
+
+/* [[bugzilla:24515]] */
+html {
+	font-size: 100%;
+}
+
+/* [[rev:76017]] */
+.usermessage {
+	background-color: #e0e8ff;
+	border: 1px solid #99b3ff;
+}
+
+/* </source> */

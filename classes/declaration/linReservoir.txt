@@ -1,0 +1,6 @@
+type	name	comment	unit
+stateScal	v	Storage volume	m^3
+inputExt	qin	Inflow rate	m^3/s
+paramNum	k	Retention constant	1/s
+output	qex_end	Qutflow at end of time step	m^3/s
+output	qex_avg	Time-step averaged outflow	m^3/s

@@ -1,0 +1,9 @@
+type	name	description	unit
+paramFun	v2k	Retention constant of the reach (s) as a function of storage (m3)	s
+paramFun	q2k	Retention constant of the reach (s) as a function of flow rate (m3/s)	s
+stateScal	vol	Storage volume of the reach	m3
+inputSim	qi_end	Inflow rate at end of time step	m3/s
+inputSim	qi_avg	Inflow rate, time step average	m3/s
+output	qx_end	Outflow rate at end of time step	m3/s
+output	qx_avg	Outflow rate, time step average	m3/s
+

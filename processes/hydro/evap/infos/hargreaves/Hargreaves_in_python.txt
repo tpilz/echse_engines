@@ -1,0 +1,46 @@
+#-------------------------------------------------------------------------------
+# Name:        module1
+# Purpose:
+#
+# Author:      Asus
+#
+# Created:     19/12/2011
+# Copyright:   (c) Asus 2011
+# Licence:     <your licence>
+#-------------------------------------------------------------------------------
+#!/usr/bin/env python
+
+from __builtin__ import *
+from array import*
+import csv
+
+
+#DEFINING FUNCTIONS
+def Hargreaves(Tmax,Tmin,Ra):
+    CH=0.0023 # Emperical Hargreaves coefficient
+    CT= 17.8 # Emperical temperature coefficient
+    output=array('f')
+    a=len(Tmax)
+    for x in range(a):
+        formula= CH*(((Tmax[x]+Tmin[x])/2) + CT)*(sqrt(Tmax[x]-Tmin[x]))*Ra[x]
+        output.append(formula)
+    return output
+#Where Tmax/min = Maximum/minimum temperature (degC);
+#Ra extraterrestrial radiation (MJ/m2/day)
+#READING FROM INPUT FILE
+Tmax=array('I')
+Tmin=array('I')
+Ra=array('f')
+f=csv.reader(open('D:\python_sample\input_har.csv', 'r'),delimiter=',')
+for a in f:
+    Tmax.append(int(a[0]))
+    Tmin.append(float(a[1]))
+    Ra.append(float(a[2]))
+
+
+#MAIN BODY OF PROGRAM
+out=Hargreaves(Tmax,Tmin,Ra)
+for x in range(len(Tmax)):
+    print Tmax[x], Tmin[x], Ra[x], round (out[x],3)
+
+

@@ -1,0 +1,8 @@
+type	name	description	unit
+inputSim	qi_end_1	Inflow rate at end of time step (source 1)	m3/s
+inputSim	qi_end_2	Inflow rate at end of time step (source 2)	m3/s
+inputSim	qi_avg_1	Inflow rate, time step average (source 1)	m3/s
+inputSim	qi_avg_2	Inflow rate, time step average (source 2)	m3/s
+output	qx_end	Outflow rate at end of time step	m3/s
+output	qx_avg	Outflow rate, time step average	m3/s
+

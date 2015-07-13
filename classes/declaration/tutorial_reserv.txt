@@ -1,0 +1,14 @@
+
+# Reservoir class for the tutorial
+
+type	name
+
+stateScal	V
+inputSim	Qin
+paramNum	Hcrest
+paramNum	a
+paramNum	b
+paramFun	h
+output	Qex
+output	dH
+

@@ -1,0 +1,8 @@
+
+Dyck 1980er Ausgabe, Band 1, S. 105 (und vorherige)
+
+Maniak S. 164 und 340
+
+Patt (siehe ../Buch_Patt)
+
+Dokumentation ArcEgmo (bzgl. Bestimmung K)

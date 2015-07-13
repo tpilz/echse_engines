@@ -1,0 +1,7 @@
+type	name	description	unit
+inputExt	precip_resid	Residuals of precipitation (time series)	mm / time step
+inputExt	precip_slope	Slope of the linear model precip ~ elevation	mm / time step / meter
+inputExt	precip_inter	Intercept of the linear model precip ~ elevation	mm / time step
+paramNum	elev	Elevation	m
+output	precip	Precipitation	mm / time step
+

@@ -1,0 +1,23 @@
+station	from	till
+
+Fichtelberg	2002-01-01	2002-05-01
+Fichtelberg	2003-01-01	2003-05-01
+Fichtelberg	2004-02-01	2004-05-01
+Fichtelberg	2005-03-01	2005-05-01
+Fichtelberg	2006-03-01	2006-05-01
+Fichtelberg	2007-02-01	2007-05-01
+Fichtelberg	2008-03-01	2008-05-01
+Fichtelberg	2009-03-01	2009-05-01
+Fichtelberg	2010-03-01	2010-05-01
+Fichtelberg	2011-03-01	2011-05-01
+
+KahlerAsten	2002-01-01	2002-05-01
+KahlerAsten	2003-01-01	2003-05-01
+KahlerAsten	2004-04-01	2004-05-01
+KahlerAsten	2005-02-01	2005-05-01
+KahlerAsten	2006-03-01	2006-05-01
+KahlerAsten	2007-01-01	2007-05-01
+KahlerAsten	2008-01-01	2008-05-01
+KahlerAsten	2009-03-01	2009-05-01
+KahlerAsten	2010-03-01	2010-05-01
+KahlerAsten	2011-01-01	2011-05-01

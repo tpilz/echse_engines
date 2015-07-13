@@ -1,0 +1,15 @@
+
+# Catchment class for the tutorial
+
+type	name
+
+inputExt	P
+stateScal	T
+paramNum	Tsat
+paramNum	Tmin
+paramNum	Dsat
+paramNum	A
+paramNum	M
+output	R
+output	Tout
+

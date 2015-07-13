@@ -1,0 +1,25 @@
+
+# Very simple controlled reservoir class
+
+type	name	description	unit
+
+inputSim	qi_end	Inflow rate at end of time step	m3/s
+inputSim	qi_avg	Inflow rate, time step average	m3/s
+stateScal	vol	Storage volume of the reservoir	m3
+paramFun	v2h	Water level (m) as a function of the storage volume (m3)	m
+paramFun	h2q_1	Outflow as a function of water level (m) when control rule 1 is active	m3/s
+paramFun	h2q_2	Outflow as a function of water level (m) when control rule 2 is active	m3/s
+paramFun	h2q_3	Outflow as a function of water level (m) when control rule 3 is active	m3/s
+paramFun	h2q_4	Outflow as a function of water level (m) when control rule 4 is active	m3/s
+paramFun	h2q_5	Outflow as a function of water level (m) when control rule 5 is active	m3/s
+paramFun	h2q_6	Outflow as a function of water level (m) when control rule 6 is active	m3/s
+paramFun	h2q_7	Outflow as a function of water level (m) when control rule 7 is active	m3/s
+paramFun	h2q_8	Outflow as a function of water level (m) when control rule 8 is active	m3/s
+paramFun	h2q_9	Outflow as a function of water level (m) when control rule 9 is active	m3/s
+paramFun	h2q_10	Outflow as a function of water level (m) when control rule 10 is active	m3/s
+paramFun	h2q_11	Outflow as a function of water level (m) when control rule 11 is active	m3/s
+paramFun	h2q_12	Outflow as a function of water level (m) when control rule 12 is active	m3/s
+inputExt	ctrl_rule	Index of the active control rule (time series)	Integer in 1:12
+output	qx_end	Outflow rate at end of time step	m3/s
+output	qx_avg	Outflow rate, time step average	m3/s
+

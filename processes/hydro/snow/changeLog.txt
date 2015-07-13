@@ -1,0 +1,3 @@
+
+[2012-07-30] In the updated version, a negative sublimation mass flux is set
+  to zero (no freezing of moisture from the air).

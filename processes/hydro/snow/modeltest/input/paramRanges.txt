@@ -1,0 +1,19 @@
+parameter	value
+precipSeconds	86400
+a0	0.002
+a1	0.0008
+kSatSnow	4.00E-005
+densDrySnow	450
+specCapRet	0.05
+emissivitySnowMin	0.84
+emissivitySnowMax	0.99
+tempAir_crit	0.2
+albedoMin	0.55
+albedoMax	0.88
+agingRate_tAirPos	0.00000110903846696913
+agingRate_tAirNeg	0.000000462099361237136
+soilDepth	0.1
+soilDens	1300
+soilSpecHeat	2.182
+weightAirTemp	0.35
+

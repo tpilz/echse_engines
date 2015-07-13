@@ -1,0 +1,6 @@
+# Initial values
+
+station	sec	swe	alb
+
+Fichtelberg	0.	0.42	0.8
+KahlerAsten	0.	0.21	0.8

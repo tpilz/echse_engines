@@ -1,0 +1,18 @@
+type	name	description	unit
+stateScal	v	Storage volume	m3
+stateScal	vp	Total precipitation input within a time step (temporary variable to compute the mass balance)	m3
+stateScal	ve	Total evaporation loss within a time step (temporary variable to compute the mass balance)	m3
+inputSim	qi_end	Inflow rate at end of time step	m3/s
+inputSim	qi_avg	Inflow rate, time step average	m3/s
+paramNum	area_max	Maximum water surface area (area collecting precipitation)	m2
+paramNum	fac_precip	Precipitation correction factor (used for input updating, for example)	dimensionless
+paramFun	v2h	Storage curve (water level as a function of the storage volume)	m
+paramFun	h2q	Rating curve at the lake's outflow (outflow rate as a function of the water level)	m3/s
+paramFun	h2a	Function to compute the evaporating surface area from the water level	m2
+inputExt	precip	Precipitation (time series)	mm / time step
+inputExt	glorad	Short-wave radiation (time series)	W/m2
+inputExt	tavg	Average air temperature (time series)	degree Celsius
+output	qx_end	Outflow rate at end of time step	m3/s
+output	qx_avg	Outflow rate, time step average	m3/s
+output	h	Water level	m
+

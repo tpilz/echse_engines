@@ -1,0 +1,11 @@
+type	name	description	unit
+inputSim	qi_end	Simlulated inflow rate at end of time step	m3/s
+inputSim	qi_avg	Simulated inflow rate, time step average	m3/s
+inputExt	qobs_avg	Observed flow, time step average. May be used as an optional substitute for the simulated inflow.	m3/s
+paramNum	obs_lbound	Threshold; The sim. flow (qi) is substituted by the obs. flow (qobs) only if qobs is greater/equal obs_lbound	m3/s
+paramNum	obs_ubound	Threshold; The sim. flow (qi) is substituted by the obs. flow (qobs) only if qobs less/equal obs_ubound	m3/s
+output	qx_avg	Outflow rate (observed or simulated, depending on qobs_avg and the thresholds), time step average	m3/s
+output	qx_avg_sim	Copy of qi_avg (i.e. simulated flow)	m3/s
+output	qx_end	Outflow rate at end of time step (observed or simulated, depending on qobs_avg and the thresholds)	m3/s
+output	qx_end_sim	Copy of qi_end (i.e. simulated flow)	m3/s
+

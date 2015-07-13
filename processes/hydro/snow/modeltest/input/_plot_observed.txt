@@ -1,0 +1,6 @@
+file	colname	color	type	name	header	comment	nodata	factor	xcut
+
+/home/dkneis/progress/echse_core/processes/snow/modeltest/input/DWD/raw/Fichtelberg/snowwe.txt	snowwe	darkblue  p Fichtelberg      TRUE # NA 1 FALSE
+
+/home/dkneis/progress/echse_core/processes/snow/modeltest/input/DWD/raw/KahlerAsten/snowwe.txt	snowwe	darkred  p KahlerAsten      TRUE # NA 1 FALSE
+

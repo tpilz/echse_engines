@@ -1,0 +1,7 @@
+# Heights of sensors
+
+station	sensorHeight_windsp	gage_protectionIndex	height_zeroWind
+
+Fichtelberg	29.	2	0.03
+KahlerAsten	27.3	2	0.03
+

@@ -1,0 +1,72 @@
+type	name	description	unit
+stateScal	wc	Soil water content (dimensionless, i.e. vol/vol or m/m)	dimensionless
+stateScal	vol_surf	Storage volume of the linear reservoir controlling surface runoff retention	m3
+stateScal	vol_pref	Storage volume of the linear reservoir controlling preferential flow retention	m3
+stateScal	vol_inter	Storage volume of the linear reservoir controlling interflow retention	m3
+stateScal	vol_base	Storage volume of the linear reservoir controlling baseflow retention	m3
+stateScal	snow_swe	Snow water equivalent	m
+stateScal	snow_sec	Energy content of the snow cover	kJ/m2
+stateScal	snow_alb	Snow albedo	dimensionless
+inputExt	precip_resid	Residuals of precipitation (time series)	mm / time step
+inputExt	precip_slope	Slope of the linear model precip ~ elevation	mm / time step / meter
+inputExt	precip_inter	Intercept of the linear model precip ~ elevation	mm / time step
+inputExt	temper_resid	Residuals of air temperature (time series)	degree Celsius
+inputExt	temper_slope	Slope of the linear model temperature ~ elevation	degree Celsius / meter
+inputExt	temper_inter	Intercept of the linear model temperature ~ elevation	degree Celsius
+inputExt	apress_resid	Residuals of air pressure (time series)	hPa
+inputExt	apress_slope	Slope of the linear model pressure ~ elevation	hPa / meter
+inputExt	apress_inter	Intercept of the linear model pressure ~ elevation	hPa
+inputExt	windsp	Wind speed (time series)	m/s
+inputExt	glorad	Short-wave radiation (time series)	W/m2
+inputExt	rhumid	Relative humidity (time series)	%
+inputExt	clness	Cloudiness (time series)	dimenionless (0...1)
+inputExt	lai	Leaf area index	dimensionless
+paramNum	area	Surface area of the catchment	m2
+paramNum	elev	Representative elevation	m asl
+paramNum	frac_noinf	Fraction of the catchment area with impervious surface	dimensionless (0...1)
+paramNum	frac_water	Fraction of the catchment area covered by water surfaces	dimensionless (0...1)
+paramNum	soildepth	Thickness of the modeled soil column	m
+paramNum	wc_max	Maximum value soil water content (water content at saturation)	dimensionless
+paramNum	exp_satfrac	Shape parameter, controls the fraction of saturated areas with increasing average saturation	dimensionless
+paramNum	thr_surf	Threshold value. Direct runoff above this rate is considered as surface runoff	m/s
+paramNum	relsat_inter	Relative filling of soil reservoir above which interflow is generated (threshold)	dimensionless (0...1)
+paramNum	rate_inter	Rate of medium-fast runoff generation at soil saturation	m/s
+paramNum	rate_base	Rate of ground-water recharge at soil saturation	m/s
+paramNum	ct_index	Concentration time index (empirical Kirpich formula, for example)	s
+paramNum	str_surf	Parameter to control retention of surface runoff	dimensionless
+paramNum	str_pref	Parameter to control retention of preferential runoff	dimensionless
+paramNum	str_inter	Parameter to control retention of medium-fast runoff	dimensionless
+paramNum	str_base	Parameter to control retention in the ground-water reservoir	dimensionless
+paramNum	relsat_etmin	Relative filling of soil reservoir below which evapotranspiration becomes zero	dimensionless (0...1)
+paramNum	relsat_etmax	Relative filling of soil reservoir above which evapotranspitation is no longer moisture-limited	dimensionless (0...1)
+paramNum	fac_precip	Precipitation correction factor (used for input updating, for example)	dimensionless
+sharedParamNum	cropFac_slope	Constant "a" in "Makking crop factor = a * LAI + b"	dimensionless
+sharedParamNum	cropFac_inter	Constant "b" in "Makking crop factor = a * LAI + b"	dimensionless
+sharedParamNum	mult_surf	Factor applied to surface runoff before output (<> 1 for tests only)	dimensionless
+sharedParamNum	mult_pref	Factor applied to preferentialrunoff before output (<> 1 for tests only)	dimensionless
+sharedParamNum	mult_inter	Factor applied to medium-fast runoff before output (<> 1 for tests only)	dimensionless
+sharedParamNum	mult_base	Factor applied to slow runoff (base flow) before output (<> 1 for tests only)	dimensionless
+sharedParamNum	snow_a0	Constant describing the dependence of moisture and heat fluxes on wind speed (additive term in linear model)	m/s
+sharedParamNum	snow_a1	Constant describing the dependence of moisture and heat fluxes on wind speed (factor in linear model)	dimensionless
+sharedParamNum	snow_kSat	Saturated hydraulic conductivity of snow	m/s
+sharedParamNum	snow_densDry	Density of dry snow	kg/m3
+sharedParamNum	snow_specCapRet	Capillary retention volume as a fraction of the solid snow water equivalent	dimensionless
+sharedParamNum	snow_emissivityMin	Minimum value of snow emissivity (for old snow surface)	dimensionless
+sharedParamNum	snow_emissivityMax	Maximum value of snow emissivity (for old snow surface)	dimensionless
+sharedParamNum	snow_tempAir_crit	Air temperature below which precipitation falls as snow	degree Celsius
+sharedParamNum	snow_albedoMin	Minimum albedo of (old) snow	dimensionless
+sharedParamNum	snow_albedoMax	Maximum albedo of (new) snow	dimensionless
+sharedParamNum	snow_agingRate_tAirPos	Aging rate describing the decrease in snow albedo when air temperature is positive	1/s
+sharedParamNum	snow_agingRate_tAirNeg	Aging rate describing the decrease in snow albedo when air temperature is negative	1/s
+sharedParamNum	snow_soilDepth	Thickness of the soil column considered in computation of the snow energy balance	m
+sharedParamNum	snow_soilDens	Density of the soil considered in computation of the snow energy balance	kg/m3
+sharedParamNum	snow_soilSpecHeat	Specific heat capacity of the soil considered in computation of the snow energy balance	kJ/kg/K
+sharedParamNum	snow_weightAirTemp	Weight used in the estimation of snow surface temperature from air temperature and mean snow temperature	dimensionless (0...1)
+sharedParamNum	snow_fullShadowLAI	Reduces short-wave incoming radiation depeding on the LAI (rad'= rad * (1 - LAI/snow_fullShadowLAI))	m
+sharedParamNum	heightZeroWind	Height above ground where wind speed approaches zero (used in precipitation correction)	m
+output	qx_end	Outflow rate of the catchment at end of time step	m3/s
+output	qx_avg	Outflow rate of the catchment, time step average	m3/s
+output	swe	Snow water equivalent	m
+output	etp	Rate of potential evapotranspiration	m/s
+output	etr	Rate of actual evapotranspiration	m/s
+

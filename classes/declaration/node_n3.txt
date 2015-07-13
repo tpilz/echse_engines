@@ -1,0 +1,10 @@
+type	name	description	unit
+inputSim	qi_end_1	see class 'node_n2'	m3/s
+inputSim	qi_end_2	see class 'node_n2'	m3/s
+inputSim	qi_end_3	see class 'node_n2'	m3/s
+inputSim	qi_avg_1	see class 'node_n2'	m3/s
+inputSim	qi_avg_2	see class 'node_n2'	m3/s
+inputSim	qi_avg_3	see class 'node_n2'	m3/s
+output	qx_end	see class 'node_n2'	m3/s
+output	qx_avg	see class 'node_n2'	m3/s
+

@@ -1,0 +1,8 @@
+
+# External inflow location
+
+type	name	description	unit
+
+inputExt	qi_avg	Inflow rate, time step average	m3/s
+output	qx_avg	Outflow rate, time step average	m3/s
+

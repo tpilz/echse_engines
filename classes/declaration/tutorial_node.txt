@@ -1,0 +1,9 @@
+
+# Node class for the tutorial
+
+type	name
+
+inputSim	Qin1
+inputSim	Qin2
+output	Qex
+
