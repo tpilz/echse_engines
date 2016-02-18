@@ -406,7 +406,7 @@ double rad_extraterr_hourly (
 	const double lat,					// Latitude (decimal degree)
 	const int hour,						// hour of day in local time (including daylight daving time), range of [0..23]
 	const int utc_add,				// Deviation of local time zone from UTC; may vary over the year due to daylight saving time; range of [-12..14] (hours)
-	const double L_m					// Longitude of the location of interest (decimal degrees west of Greenwich, e.g. Greenwich (Winter): 0°, Berlin (Winter): 345°, New York: 75°)
+	const double L_m					// Longitude of the location of interest (decimal degrees west of Greenwich, e.g. Greenwich: 0°, Berlin: 345°, New York: 75°)
 ) {
 	// check input
 	if ( (hour < 0) || (hour > 23) ) {
@@ -462,6 +462,7 @@ double rad_extraterr_hourly (
 // radiation and emprical parameters (Angström  coefficients) (Wm-2).
 // Dyck & Peschke (1995), p. 30, eq. 3.10
 // TODO: Account for observed cloudiness as input (nn NOT equal to 1 - cloud).
+// ATTENTION: For daily resolution only! Resturns daily average value.
 // Parameters: 
 //			- Dyck & Peschke (1995): radex_a = 0.25, radex_b = 0.5
 //			- WASA (Guentner, 2002): radex_a = 0.18, radex_b = 0.55
@@ -498,7 +499,8 @@ double calc_glorad (
 
 ////////////////////////////////////////////////////////////////////////////////
 // Maximum global radiation in case of clear sky (Wm-2).
-// Dyck & Peschke (1995), p. 30, eq. 3.10
+// Dyck & Peschke (1995), p. 30, eq. 3.10 (method 1)
+// OR Allen (2005), ASCE standard etp, eq. 19
 // Parameters: 
 //			- Dyck & Peschke (1995): radex_a = 0.25, radex_b = 0.5
 //			- WASA (Guentner, 2002): radex_a = 0.18, radex_b = 0.55
@@ -506,11 +508,22 @@ double calc_glorad (
 ////////////////////////////////////////////////////////////////////////////////
 
 double calc_glorad_max (
+	const int choice,						// Flag which method to use (see above)
 	const double radex,					// Incoming extraterrestrial radiation (i.e. at top of atmosphere) (W/m2)
 	const double radex_a,				// Angstrom coefficient (share of radex on glorad under clouds) (-)
-	const double radex_b				// Angstrom coefficient (radex_a+radex_b = share of radex on glorad under clear sky) (-)
+	const double radex_b,				// Angstrom coefficient (radex_a+radex_b = share of radex on glorad under clear sky) (-)
+	const double elev						// Elevation above sea level (m)
 ) {
-	return( radex * (radex_a + radex_b) );
+	double res = -9999.;
+	
+	switch(choice) {
+		case 1: // Angstroem
+			res = radex * (radex_a + radex_b);
+			
+		case 2: // Allen (2005), ASCE standard etp, eq. 19
+			res = radex * (0.75 + 2e-5 * elev);
+		
+	return(res);
 }
 
 
@@ -546,6 +559,12 @@ double net_emiss (
 ////////////////////////////////////////////////////////////////////////////////
 // Cloudiness correction factor (-).
 // Dyck & Peschke (1995), p. 31, combining eqs. 3.10 and 3.13
+// ATTENTION: Works for daily (or sub-daily values over daytime) only, i.e. when glorad_max > 0.
+// To avoid this problem assume a constant cloudiness over night, i.e. use the last
+// values of radiation before sunset. In a model engine this can be realized by using
+// glorad_max and glorad as a state variables, i.e. update the state variables over daytime on
+// time steps where glorad_max > 0 and don't update it otherwise (i.e. over nighttime)
+// to ensure the last value before sunset is used over the all night time steps.
 // Coefficients:
 //		- SWAT manual (2011): a = 0.9, b = 0.1
 //		- Dyck & Peschke (1995): arid areas: a = 1.35, b = -0.35; humid areas: a = 1, b = 0
@@ -559,6 +578,13 @@ double f_cloud (
 	const double a,					// Parameter (radiation coefficient a for cloudless sky)
 	const double b					// Parameter (radiation coefficient b for cloudless sky)
 ) {
+	
+	if(glorad_max < 1e-6) {
+		stringstream errmsg;
+		errmsg << "Computation of cloudiness correction factor: Input 'glorad_max' is zero which is not allowed!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
 	
 	return( a * glorad / glorad_max + b);
 }
@@ -633,7 +659,7 @@ double soil_heatflux (
 	const double f_day,			// Fraction of net_rad over daytime (in case of sub-daily application) (-)
 	const double f_night,		// Fraction of net_rad over nighttime (in case of sub-daily application) (-)
 	const int daynight,			// flag: 1: calculation for day time; 0: calculation for night time
-	const int delta_t				// time step length (s)
+	const unsigned int delta_t				// time step length (s)
 ) {
 	double res = -9999.;
 	
