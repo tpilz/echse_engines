@@ -223,7 +223,7 @@ double et_sw_cano (
 	// canopy evaporation
 	double etc = (delta * (A_total - A_s) + rho_air * SPHEATMOIST * D_0 / r_ca) / (delta + gamma * (1. + r_cs/r_ca)) / lambda;
 	
-	return(etc/1000.)
+	return(etc/1000.);
 }
 
 // sub-function total evapotranspiration (m/s)
@@ -273,7 +273,7 @@ double et_sw (
 	// compute evapotranspiration rate, eq. 11 (mm/s)
 	double et = (C_c * PM_c + C_s * PM_s) / lambda;
 	
-	return(et/1000.)
+	return(et/1000.);
 }
 
 #endif

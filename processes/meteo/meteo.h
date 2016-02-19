@@ -322,7 +322,7 @@ double sol_decl (
 // <tobias.pilz@uni-potsdam.de>, JUL 2015
 ////////////////////////////////////////////////////////////////////////////////
 
-double eccorr (
+double e_corr (
 	double doy					// Current day of year
 ) {
 	// omit leap years; this limits the accuracy during leap years
@@ -519,10 +519,19 @@ double calc_glorad_max (
 	switch(choice) {
 		case 1: // Angstroem
 			res = radex * (radex_a + radex_b);
+			break;
 			
 		case 2: // Allen (2005), ASCE standard etp, eq. 19
 			res = radex * (0.75 + 2e-5 * elev);
-		
+			break;
+			
+		default :
+			stringstream errmsg;
+      errmsg << "Invalid choice to calculate maximum incoming short-wave radiation! Currently supported is one of {1,2}.";
+      except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+      throw(e); 
+	}
+	
 	return(res);
 }
 

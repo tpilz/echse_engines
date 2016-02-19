@@ -43,13 +43,13 @@ double et_act (
 	const double wstressmax,							// Threshold for water stress effect on resistance (total stomata closure, wilting point) (cm) OR (hPa)
 	const double par_stressHum,						// Parameter to calculate water vapour deficit stomatal conductance stress factor (hPa-1) - in WASA a value of 0.03
 // Common meteorological variables
-	const double temper,									// Air temperature (°C)
+	double temper,												// Air temperature (°C)
 	const double temp_min,								// Minimum temperature within time step (°C)
 	const double temp_max,								// Maximum temperature within time step (°C)
-  const double glorad,       						// Downward short-wave radiation (W/m2)
+  double glorad,       									// Downward short-wave radiation (W/m2)
 	const double rhum,										// relative humidity (%)
 	const double wind,										// wind speed (m/s)
-	const double apress,       						// Air pressure (hPa)
+	double apress,       									// Air pressure (hPa)
 	const double sundur,									// Sunshine duration of current day (h)
 	const double cloud,										// Cloudiness (%)
 // Common site-secific parameters
@@ -57,13 +57,13 @@ double et_act (
 	const double lon,											// Longitude of the location of interest (decimal degrees west of Greenwich, e.g. Greenwich: 0°, Berlin: 345°, New York: 75°)
 	const double elev,										// Elevation above sea level (m)
 // Specific meteorological quantities (commonly calculated internally)
-	const double radex,										// Incoming extraterrestrial radiation (i.e. at top of atmosphere) (W/m2)
-	const double glorad_max, 							// Downward short-wave radiation under clear (cloudless) sky (Wm-2)
-	const double H_net,										// net incoming (short-wave + long-wave) radiation (Wm-2)
-	const double H_soil,									// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
-	const double H_long,									// Net incoming long-wave radiation (Wm-2)
-	const double soilheat,								// Soil heat flux (Wm-2)
-	const double totalheat,								// heat conduction into soil AND plants due to physical and biochemical energy storage (Wm-2)
+	double radex,													// Incoming extraterrestrial radiation (i.e. at top of atmosphere) (W/m2)
+	double glorad_max, 										// Downward short-wave radiation under clear (cloudless) sky (Wm-2)
+	double H_net,													// net incoming (short-wave + long-wave) radiation (Wm-2)
+	double H_soil,												// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
+	double H_long,												// Net incoming long-wave radiation (Wm-2)
+	double soilheat,											// Soil heat flux (Wm-2)
+	double totalheat,											// heat conduction into soil AND plants due to physical and biochemical energy storage (Wm-2)
 // Meteorological parameters
 	const double h_tempMeas,							// height of temperature measurement above ground (m)
 	const double h_humMeas,								// height of humidity measurement above ground (psychrometer) (m)
@@ -332,7 +332,7 @@ double et_act (
 			double d = height_plantDisplace(ch_plantDispl, cano_height, lai, drag_coef);
 			
 			// roughness length of vegetation (m)
-			double z = roughLen_mom(ch_roughLen, height, lai, d, drag_coef, rough_bare);
+			double z = roughLen_mom(ch_roughLen, cano_height, lai, d, drag_coef, rough_bare);
 			
 			// Aerodynamic resistance between soil surface and canopy height (sm-1)
 			double r_sa = res_sa(wind, h_windMeas, cano_height, d, z, eddy_decay, rough_bare);
@@ -352,7 +352,7 @@ double et_act (
 	
 	
 	// calculate soil-moisture factor for empirical and FAO reference approaches
-	double f_moist = min(1, max(0, (wc_vol_root - wc_pwp)/(wc_etmax - wc_pwp) ));
+	double f_moist = min(1., max(0., (wc_vol_root - wc_pwp)/(wc_etmax - wc_pwp) ));
 	
 	// return eta
 	return(etp * f_moist);
