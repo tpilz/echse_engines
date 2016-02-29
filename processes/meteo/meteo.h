@@ -481,6 +481,13 @@ double calc_glorad (
 	double sundur_max = -9999.;
 	double nn = -9999.;
 	
+	if( (radex_a + radex_b) > 1.0 ) {
+		stringstream errmsg;
+		errmsg << "Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	
 	// use cloudiness or sunshine duration
 	if (sundur < -90.) {
 		stringstream errmsg;
@@ -516,6 +523,14 @@ double calc_glorad_max (
 ) {
 	double res = -9999.;
 	
+	if( (radex_a + radex_b) > 1.0 ) {
+		stringstream errmsg;
+		errmsg << "Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+			
+			
 	switch(choice) {
 		case 1: // Angstroem
 			res = radex * (radex_a + radex_b);
