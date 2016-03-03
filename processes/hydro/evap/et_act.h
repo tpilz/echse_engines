@@ -297,6 +297,14 @@ double et_act (
 		// Shuttleworth-Wallace
 		if (choice == 13) {
 			
+			// check water content values
+			if( (wc_vol_top < wc_res) || (wc_vol_top > wc_sat) ) {
+				stringstream errmsg;
+				errmsg << "Cannot calculate actual evapotranspiration, unreasonable value of water content at top soil!";
+				except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+				throw(e);
+			}
+			
 			// total heat flux (conduction into soil and energy storage in plants and atmophere below reference height; for SW model only)
 			// for simplicity calculate similar to soilheatflux; TODO: better approaches?
 			if (abs(totalheat - na_val) < 0.01) {
@@ -350,6 +358,13 @@ double et_act (
 	}
 	
 	
+	// check water content values
+	if( (wc_pwp < 0.) || (wc_etmax > 1.) || (wc_pwp > wc_etmax) || (wc_vol_root < 0.) || (wc_vol_root > 1.) ) {
+		stringstream errmsg;
+		errmsg << "Cannot calculate soil moisture factor for calculation of actual evapotranspiration, unreasonable values of water content at root zone and/or wilting point and/or parameter wc_etmax!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e);
+	}
 	
 	// calculate soil-moisture factor for empirical and FAO reference approaches
 	double f_moist = min(1., max(0., (wc_vol_root - wc_pwp)/(wc_etmax - wc_pwp) ));

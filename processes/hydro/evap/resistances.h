@@ -227,6 +227,13 @@ double stress_soilwater(
 	const double wstressmin,		// Threshold for water stress effect on resistance (begin of stomata closure) (cm) or (hPa)
 	const double wstressmax			// Threshold for water stress effect on resistance (total stomata closure, wilting point) (cm) or (hPa)
 ) {
+	// check water content values
+	if( (wc_res < 0.) || (wc_sat > 1.) || (wc_res > wc_sat) || (wc < wc_res) || (wc > wc_sat) ) {
+		stringstream errmsg;
+		errmsg << "Cannot calculate soilwater plant stress factor, unreasonable values of water content and/or water content at saturated and/or residual water content!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e);
+	}
 	
 	// relative saturation (-)
 	double sat_rel = (wc - wc_res) / (wc_sat - wc_res);
