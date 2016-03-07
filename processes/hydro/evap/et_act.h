@@ -59,7 +59,7 @@ double et_act (
 // Specific meteorological quantities (commonly calculated internally)
 	double radex,													// Incoming extraterrestrial radiation (i.e. at top of atmosphere) (W/m2)
 	double glorad_max, 										// Downward short-wave radiation under clear (cloudless) sky (Wm-2)
-	double H_net,													// net incoming (short-wave + long-wave) radiation (Wm-2)
+	double H_net,													// net incoming ( (1-alb) * short-wave + long-wave) radiation (Wm-2)
 	double H_soil,												// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
 	double H_long,												// Net incoming long-wave radiation (Wm-2)
 	double soilheat,											// Soil heat flux (Wm-2)
@@ -288,7 +288,7 @@ double et_act (
 		// FAO reference evapotranspiration for reference grass surface
 		if (choice == 12) {
 			// calculate etp for reference surface
-			etp = et_penmon_ref(temper,wind,apress,delta,H_net,ez_0,ez,h_windMeas,delta_t);
+			etp = et_penmon_ref(temper,wind,apress,delta,H_net,soilheat,ez_0,ez,h_windMeas,delta_t);
 			
 			// etp for current crop; eta calculated later on by soil moisture reduction function
 			etp = etp * crop_faoref;

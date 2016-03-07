@@ -421,6 +421,12 @@ double rad_extraterr_hourly (
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
+	if ( (L_m < 0.) || (L_m > 360.) ) {
+		stringstream errmsg;
+		errmsg << "Computation of extraterrestrial radiation (hourly): Longitude in degrees west of Greenwich required, i.e. [0..360], e.g. Greenwich: 0°, New York: 75°, Berlin: 345°!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
 	
 	// compute centre of current time zone (decimal degrees west of Greenwich)
 	int L_z = (360 - utc_add * 15) % 360;
@@ -483,7 +489,7 @@ double calc_glorad (
 	
 	if( (radex_a + radex_b) > 1.0 ) {
 		stringstream errmsg;
-		errmsg << "Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
+		errmsg << "Calculation of actual incoming shortwave radiation: Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
@@ -525,7 +531,7 @@ double calc_glorad_max (
 	
 	if( (radex_a + radex_b) > 1.0 ) {
 		stringstream errmsg;
-		errmsg << "Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
+		errmsg << "Computation of maximum incoming short-wave radiation: Parameters (radex_a + radex_b) > 1.0 which is physically not possible!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
@@ -609,6 +615,12 @@ double f_cloud (
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
+	if( (a + b) > 1.0 ) {
+		stringstream errmsg;
+		errmsg << "Computation of cloudiness correction factor: Parameters (a + b) > 1.0 which is physically not possible!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
 	
 	return( a * glorad / glorad_max + b);
 }
@@ -633,6 +645,7 @@ double net_longrad (
 ) {
 	// calculate cloud correction factor
 	double f = f_cloud(glorad, glorad_max, fcorr_a, fcorr_b);
+
 	
 	// calculate net emissivity (-)
 	double em = net_emiss(temp, relhum, emis_a, emis_b);

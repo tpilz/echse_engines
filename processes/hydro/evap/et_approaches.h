@@ -54,7 +54,7 @@ double lakeEvap_makkink(
 double et_penmon (
 	const double lambda,				// Latent heat of water evaporation (J/kg)
 	const double delta,					// slope of saturation vapor pressure curve (hPa/K)
-	const double H_net,					// net incoming (short-wave + long-wave) radiation (Wm-2)
+	const double H_net,					// net incoming ( (1-alb) * short-wave + long-wave) radiation (Wm-2)
 	const double G,							// soil heat flux (Wm-2)
 	const double rho_air,				// air density (kgm-3)
 	const double ez_0,					// saturation vapor pressure of air (hPa)
@@ -93,7 +93,8 @@ double et_penmon_ref (
 	double windspeed,					// Windspeed (ms-1)
 	double airpress,					// Air pressure (hPa)
 	double delta,							// slope of saturation vapor pressure curve (hPa/K)
-	double H_net,							// net incoming (short-wave + long-wave) radiation (Wm-2)
+	double H_net,							// net incoming ( (1-alb) * short-wave + long-wave) radiation (Wm-2)
+	const double G,						// soil heat flux (Wm-2)
 	double ez_0,							// saturation vapor pressure of air (hPa)
 	double ez,								// vapor pressure of air (hPa)
 	const double h_windMeas,	// height of windspeed measurement (m)
@@ -123,14 +124,14 @@ double et_penmon_ref (
 	if(delta_t == 86400) {
 		// net incoming radiation (Wm-2)
 		H_net = H_net * 86400. / 1e6; // Wm-2 -> MJ/m2/day
-		etp = ( 0.408 * delta * H_net + gamma * 900. / (temper+273.) * windspeed * (ez_0 - ez) ) /
+		etp = ( 0.408 * delta * (H_net - G) + gamma * 900. / (temper+273.) * windspeed * (ez_0 - ez) ) /
 								( delta + gamma * (1. + 0.34 * windspeed) );
 		etp = etp / 86400.;
 		
 	} else if(delta_t == 3600) {
 		// net incoming radiation (Wm-2)
 		H_net = H_net * 3600. / 1e6; // Wm-2 -> MJ/m2/hour
-		etp = ( 0.408 * delta * H_net + gamma * 37. / (temper+273.) * windspeed * (ez_0 - ez) ) /
+		etp = ( 0.408 * delta * (H_net - G) + gamma * 37. / (temper+273.) * windspeed * (ez_0 - ez) ) /
 								( delta + gamma * (1. + 0.34 * windspeed) );
 		etp = etp / 3600.;
 		
@@ -165,7 +166,7 @@ double et_penmon_ref (
 // sub-function for vapour pressure deficit at canopy source height (hPa)
 // Suttleworth & Wallace (1985), eq. 8
 double vapPressDeficit_canopy(
-	const double H_net,						// net incoming (short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
+	const double H_net,						// net incoming ( (1-alb) * short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
 	const double totalheat,			// heat conduction into soil AND plants (Wm-2)
 	const double gamma,						// psychrometric constant (hPa/K)
 	const double delta,						// slope of saturation vapor pressure curve (hPa/K)
@@ -205,7 +206,7 @@ double et_sw_soil (
 double et_sw_cano (
 	const double lambda,				// Latent heat of water evaporation (J/kg)
 	const double delta,					// slope of saturation vapor pressure curve (hPa/K)
-	const double H_net,					// net incoming (short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
+	const double H_net,					// net incoming ( (1-alb) * short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
 	const double H_soil,				// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
 	const double totalheat,		// heat conduction into soil AND plants (Wm-2)
 	const double soilheat, 		// soil heat flux (Wm-2)
@@ -231,7 +232,7 @@ double et_sw_cano (
 double et_sw (
 	const double lambda,				// Latent heat of water evaporation (J/kg)
 	const double delta,					// slope of saturation vapor pressure curve (hPa/K)
-	const double H_net,					// net incoming (short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
+	const double H_net,					// net incoming ( (1-alb) * short-wave + long-wave) radiation (at reference/measurement height) (Wm-2)
 	const double H_soil,				// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
 	const double totalheat,		// heat conduction into soil AND plants (Wm-2)
 	const double soilheat, 		// soil heat flux (Wm-2)

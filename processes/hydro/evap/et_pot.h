@@ -47,7 +47,7 @@ double et_pot (
 // Specific meteorological quantities (commonly calculated internally)
 	double radex,													// Incoming extraterrestrial radiation (i.e. at top of atmosphere) (W/m2)
 	double glorad_max, 										// Downward short-wave radiation under clear (cloudless) sky (Wm-2)
-	double H_net,													// net incoming (short-wave + long-wave) radiation (Wm-2)
+	double H_net,													// net incoming ( (1-alb) * short-wave + long-wave) radiation (Wm-2)
 	double H_soil,												// net incoming (short-wave + long-wave) radiation hitting the soil surface (Wm-2)
 	double H_long,												// Net incoming long-wave radiation (Wm-2)
 	double soilheat,											// Soil heat flux (Wm-2)
@@ -169,7 +169,7 @@ double et_pot (
 			// calculate long-wave radiation if not given
 			if (abs(H_long - na_val) < 0.01) {
 				// calc glorad_max if not given
-				if (abs(glorad_max - na_val) < 0.01) {
+				if ( abs(glorad_max - na_val) < 0.01 ) {
 					// calculate radex if not given
 					if (abs(radex - na_val) < 0.01) {
 						if(delta_t == 86400)
@@ -264,7 +264,7 @@ double et_pot (
 		
 		// FAO reference evapotranspiration for reference grass surface
 		if (choice == 12) {
-			return(crop_faoref * et_penmon_ref(temper,wind,apress,delta,H_net,ez_0,ez,h_windMeas,delta_t));
+			return(crop_faoref * et_penmon_ref(temper,wind,apress,delta,H_net,soilheat,ez_0,ez,h_windMeas,delta_t));
 		}
 		
 		// Shuttleworth-Wallace
