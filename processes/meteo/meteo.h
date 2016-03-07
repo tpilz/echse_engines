@@ -22,7 +22,7 @@
 double apress_simple (
 	const double elev				// elevation above sea level (m)
 ) {
-	return( 1013.25 * pow( 1 - (0.0065 * elev / 293.), 5.255) );
+	return( 1013.25 * pow( 1. - (0.0065 * elev / 293.), 5.255) );
 }
 
 
@@ -222,7 +222,7 @@ double f_compress (
 	double x_v = moleFrac_waterVap(airpress,temp,relhum);
 	
 	return(
-		1 - p / (temp + T_DEG_K) * 
+		1. - p / (temp + T_DEG_K) * 
 		(1.58123e-06 - 2.9331e-08 * temp + 1.1043e-10 * pow(temp,2) + (5.707e-06 - 2.051e-08 * temp) * x_v + (1.9898e-04 - 2.376e-06 * temp) * pow(x_v,2)) + 
 		pow(p,2) / pow(temp + T_DEG_K, 2) * (1.83e-11 - 0.765e-08 * pow(x_v,2))
 	);
@@ -253,7 +253,7 @@ double densityMoistAir (
 	// calculate mole fraction of water vapor
 	double x_v = moleFrac_waterVap(airpress,temp,relhum);
 	
-	return( p * M_DA / (Z * R * (temp + T_DEG_K)) * (1 - x_v * (1 - M_W / M_DA)) );
+	return( p * M_DA / (Z * R * (temp + T_DEG_K)) * (1. - x_v * (1. - M_W / M_DA)) );
 }
 
 
@@ -348,7 +348,7 @@ double dayTime_fac (
 	// latitude in (rad)
 	double phi = abs(lat * PI / 180.);
 	
-	double sunrise = -tan(sol_decl(doy)) * tan(phi);
+	double sunrise = -1. * tan(sol_decl(doy)) * tan(phi);
 	
 	if (sunrise > 1.)
 		sunrise = 1.;
@@ -650,7 +650,7 @@ double net_longrad (
 	// calculate net emissivity (-)
 	double em = net_emiss(temp, relhum, emis_a, emis_b);
 	
-	return( - f * em * SIGMA * pow(temp + T_DEG_K,4) );
+	return( -1. * f * em * SIGMA * pow(temp + T_DEG_K,4) );
 }
 
 
@@ -676,7 +676,7 @@ double net_rad (
 	// estimate net incoming long-wave radiation (Wm-2)
 	double netlongrad = net_longrad(temp,relhum,glorad,glorad_max,emis_a,emis_b,fcorr_a,fcorr_b);
 	
-	double res = (1 - alb) * glorad + netlongrad;
+	double res = (1. - alb) * glorad + netlongrad;
 	
 	return (res);
 }

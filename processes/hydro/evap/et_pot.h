@@ -198,7 +198,7 @@ double et_pot (
 		// radiation at soil surface (only for SW; set to H_net for other aproaches) (Wm-2)
 		if (abs(H_soil - na_val) < 0.01) {
 			if (choice == 13)
-				H_soil = H_net * exp(-ext * lai); // canopy extinction according to Beer's law -> net radiation at soil surface (Wm-2)
+				H_soil = H_net * exp(-1. * ext * lai); // canopy extinction according to Beer's law -> net radiation at soil surface (Wm-2)
 			else
 				H_soil = H_net;
 		}

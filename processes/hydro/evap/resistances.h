@@ -412,7 +412,7 @@ double res_sa (
 	// Shuttlewort & Wallace (1985) eq. 26
 	return( ( log((h_windMeas-h_plantDispl) / rough_len) / pow(KARMAN,2) * windspeed ) * 
 					( cano_height / (eddy_decay * (cano_height-h_plantDispl)) ) *
-					( exp(eddy_decay * (1 - rough_bare / cano_height)) - exp(eddy_decay * (1 - (h_plantDispl+rough_len) / cano_height)) )
+					( exp(eddy_decay * (1. - rough_bare / cano_height)) - exp(eddy_decay * (1. - (h_plantDispl+rough_len) / cano_height)) )
 	);
 }
 
@@ -492,7 +492,7 @@ double res_cs (
 			double cond_l = 1. / res_ST;
 			
 			// canopy conductance
-			double cond_cano = cond_l / ext * log( (glo_half + ext * glorad) / (glo_half + ext * glorad * exp(-ext * lai)) );
+			double cond_cano = cond_l / ext * log( (glo_half + ext * glorad) / (glo_half + ext * glorad * exp(-1. * ext * lai)) );
 			
 			// return canopy resistance
 			return( 1. / cond_cano );
