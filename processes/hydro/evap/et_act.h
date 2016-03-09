@@ -120,25 +120,6 @@ double et_act (
 		temper = (temp_max + temp_min) / 2.;
 	}
 	
-	// glorad (try to calculate if not available)
-	if (abs(glorad - na_val) < 0.01) {
-		// cannot be calculated for sub.daily time steps
-		if (delta_t < 86400) {
-			stringstream errmsg;
-			errmsg << "Value for incoming short-wave radiation is missing and cannot be calculate because of sub-daily resolution!";
-			except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-			throw(e);
-		}
-		
-		// calculate radex if not given
-		if (abs(radex - na_val) < 0.01) {
-			radex = rad_extraterr_daily(doy,lat);
-		}
-		
-		// calculate glorad
-		glorad = calc_glorad(radex,sundur,cloud,lat,doy,radex_a,radex_b);
-	}
-	
 	// apress (calculate if not given)
 	if (abs(apress - na_val) < 0.01) {
 		apress = apress_simple(elev);
@@ -152,6 +133,25 @@ double et_act (
 	
 // EMPIRICAL RELATIONS, choice = {1..10}
 	if(choice <= 10) {
+		
+		// glorad (try to calculate if not available)
+		if (abs(glorad - na_val) < 0.01) {
+			// cannot be calculated for sub.daily time steps
+			if (delta_t < 86400) {
+				stringstream errmsg;
+				errmsg << "Value for incoming short-wave radiation is missing and cannot be calculate because of sub-daily resolution!";
+				except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+				throw(e);
+			}
+			
+			// calculate radex if not given
+			if (abs(radex - na_val) < 0.01) {
+				radex = rad_extraterr_daily(doy,lat);
+			}
+			
+			// calculate glorad
+			glorad = calc_glorad(radex,sundur,cloud,lat,doy,radex_a,radex_b);
+		}
 		
 		// CALC ET
 		
@@ -180,6 +180,34 @@ double et_act (
 		
 		// net incoming radiation (Wm-2)
 		if (abs(H_net - na_val) < 0.01) {
+			
+			// glorad (try to calculate if not available)
+			if (abs(glorad - na_val) < 0.01) {
+				// cannot be calculated for sub.daily time steps
+				if (delta_t < 86400) {
+					stringstream errmsg;
+					errmsg << "Value for incoming short-wave radiation is missing and cannot be calculate because of sub-daily resolution!";
+					except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+					throw(e);
+				}
+				
+				// calculate radex if not given
+				if (abs(radex - na_val) < 0.01) {
+					if(delta_t == 86400)
+						radex = rad_extraterr_daily(doy,lat);
+					else if(delta_t == 3600)
+						radex = rad_extraterr_hourly(doy,lat,hour,utc_add,lon);
+					else {
+						stringstream errmsg;
+						errmsg << "Extraterrestrial radiation needs to be calculated but this is currently only possible for daily (86400s) and hourly (3600s) time steps!";
+						except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+						throw(e);
+					}
+				}
+				
+				// calculate glorad
+				glorad = calc_glorad(radex,sundur,cloud,lat,doy,radex_a,radex_b);
+			}
 			
 			// calculate long-wave radiation if not given
 			if (abs(H_long - na_val) < 0.01) {

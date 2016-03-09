@@ -611,7 +611,13 @@ double f_cloud (
 	
 	if(glorad_max < 1e-6) {
 		stringstream errmsg;
-		errmsg << "Computation of cloudiness correction factor: Input 'glorad_max' is zero which is not allowed!";
+		errmsg << "Computation of cloudiness correction factor: Input 'glorad_max' is less or equal to zero which is not allowed!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	if(glorad < 1e-6) {
+		stringstream errmsg;
+		errmsg << "Computation of cloudiness correction factor: Input 'glorad' is less or equal to zero which is not allowed!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
