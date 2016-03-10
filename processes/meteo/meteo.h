@@ -384,7 +384,17 @@ double rad_extraterr_daily (
 	// daylight time factor (-)
 	double t_sr = dayTime_fac(doy,lat);
 	
-	return( 1./PI * SOLAR_C * E_0 * (t_sr * sin(delta) * sin(phi) + cos(delta) * cos(phi) * sin(t_sr)) );
+	// calculate result (Wm-2)
+	double res = 1./PI * SOLAR_C * E_0 * (t_sr * sin(delta) * sin(phi) + cos(delta) * cos(phi) * sin(t_sr));
+	
+	if( res < 0. ) {
+		stringstream errmsg;
+		errmsg << "Computation of extraterrestrial radiation (daily): Result is negative which is physically not possible. Check your input (lat and doy)!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	
+	return( res );
 }
 
 
@@ -435,9 +445,14 @@ double rad_extraterr_hourly (
 	double b = 2. * PI * (doy - 81.) / 364.;
 	double S_c = 0.1645 * sin(2.*b) - 0.1255 * cos(b) - 0.025 * sin(b);
 	
+  // determine shortest deviation between L_z and L_m on imaginary circle (not quite trivial if, e.g., L_m = 8.3 and L_z = 345)
+  double L_diff1 = L_z - L_m; // 'raw' difference
+  double L_diff2 = fabs(L_diff1) > 180. ? 360. - fabs(L_diff1) : L_diff1; // absolute smallest difference
+  double L_diff = L_diff1 > 0. ? -1.*L_diff2 : L_diff2; // account for sign
+  
 	// solar time angle at the midpoint of the hour of day (rad), eq. 31
 	double hour_mid = hour + 0.5;
-	double w_mid = PI / 12. * ( (hour_mid + 0.06667 * (L_z-L_m) + S_c) - 12. );
+	double w_mid = PI / 12. * ( (hour_mid + 0.06667 * L_diff + S_c) - 12. );
 	
 	// solar time angles at begin and end of hour, eqs. 29, 30
 	double w_ini = w_mid - PI / 24.;
@@ -459,7 +474,17 @@ double rad_extraterr_hourly (
 	// latitude in (rad)
 	double phi = lat * PI / 180.;
 	
-	return( 1./PI * SOLAR_C * E_0 * ( (w_end-w_ini) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_end)-sin(w_ini)) ) );
+	// calculate result (Wm-2)
+	double res = 12./PI * SOLAR_C * E_0 * ( (w_end-w_ini) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_end)-sin(w_ini)) );
+	
+	if( res < 0. ) {
+		stringstream errmsg;
+		errmsg << "Computation of extraterrestrial radiation (hourly): Result is negative which is physically not possible. Check your input!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	
+	return( res );
 }
 
 
@@ -553,6 +578,13 @@ double calc_glorad_max (
       throw(e); 
 	}
 	
+	if( res < 0. ) {
+		stringstream errmsg;
+		errmsg << "Computation of clear-sky short-wave radiation: Result is negative which is physically not possible. Check your input!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	
 	return(res);
 }
 
@@ -574,15 +606,20 @@ double net_emiss (
 	const double a,					// coefficient
 	const double b					// coefficient
 ) {
+	double res = -9999.;
+	
 	// two variants depending on availability of relhum measurements
 	if(relhum < -90.)
-		return( -0.02 + 0.261 * exp(-7.77e-04 * pow(temp,2)) );
+		res = -0.02 + 0.261 * exp(-7.77e-04 * pow(temp,2));
 	else {
 		// calculate vapor pressure from temperature and relative humidity (kPa)
 		double e = vapPress_overWater(temp, relhum) / 10.;
 		
-		return( a + b * sqrt(e) );
+		// calculate emissivity and check result
+		res = a + b * sqrt(e);
 	}
+	
+	return( res );
 }
 
 
@@ -611,13 +648,13 @@ double f_cloud (
 	
 	if(glorad_max < 1e-6) {
 		stringstream errmsg;
-		errmsg << "Computation of cloudiness correction factor: Input 'glorad_max' is less or equal to zero which is not allowed!";
+		errmsg << "Computation of cloudiness correction factor: Input 'glorad_max' is less than or equal to zero which is not allowed!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
-	if(glorad < 1e-6) {
+	if(glorad < 0.) {
 		stringstream errmsg;
-		errmsg << "Computation of cloudiness correction factor: Input 'glorad' is less or equal to zero which is not allowed!";
+		errmsg << "Computation of cloudiness correction factor: Input 'glorad' is less than zero which is not allowed!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
@@ -628,7 +665,16 @@ double f_cloud (
 		throw(e); 
 	}
 	
-	return( a * glorad / glorad_max + b);
+	double res = a * glorad / glorad_max + b;
+
+	if( res > 1. ) {
+		stringstream errmsg;
+		errmsg << "Computation of cloudiness correction factor: Result is greater one which is physically not possible. Check your input!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+	
+	return( res );
 }
 
 
@@ -656,7 +702,10 @@ double net_longrad (
 	// calculate net emissivity (-)
 	double em = net_emiss(temp, relhum, emis_a, emis_b);
 	
-	return( -1. * f * em * SIGMA * pow(temp + T_DEG_K,4) );
+	// calculate long-wave radiation (positive downward) (Wm-2)
+	double res = -1. * f * em * SIGMA * pow(temp + T_DEG_K,4);
+	
+	return( res );
 }
 
 
