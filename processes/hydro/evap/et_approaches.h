@@ -68,7 +68,7 @@ double et_penmon (
 							( (delta + gamma * (1. + (r_c/r_a))) * lambda );
 							
 	// return evapotranspiration in (m/s)
-	return(et/1000.);
+	return( max(0., et/1000.) );
 	
 }
 
@@ -94,7 +94,7 @@ double et_penmon_ref (
 	double airpress,					// Air pressure (hPa)
 	double delta,							// slope of saturation vapor pressure curve (hPa/K)
 	double H_net,							// net incoming ( (1-alb) * short-wave + long-wave) radiation (Wm-2)
-	const double G,						// soil heat flux (Wm-2)
+	double G,						// soil heat flux (Wm-2)
 	double ez_0,							// saturation vapor pressure of air (hPa)
 	double ez,								// vapor pressure of air (hPa)
 	const double h_windMeas,	// height of windspeed measurement (m)
@@ -114,7 +114,7 @@ double et_penmon_ref (
 	ez = ez/10.;
 	
 	// psychrometric constant (kPa/K), implicitly includes latent heat of vaporization
-	double gamma = 0.665e-03 * airpress;
+	double gamma = 0.665e-03 * airpress/10.;
 	
 	// slope of saturation vapor pressure curve in (kPa/K)
 	delta = delta/10.;
@@ -124,6 +124,7 @@ double et_penmon_ref (
 	if(delta_t == 86400) {
 		// net incoming radiation (Wm-2)
 		H_net = H_net * 86400. / 1e6; // Wm-2 -> MJ/m2/day
+		G = G * 86400. / 1e6; // Wm-2 -> MJ/m2/day
 		etp = ( 0.408 * delta * (H_net - G) + gamma * 900. / (temper+273.) * windspeed * (ez_0 - ez) ) /
 								( delta + gamma * (1. + 0.34 * windspeed) );
 		etp = etp / 86400.;
@@ -131,6 +132,7 @@ double et_penmon_ref (
 	} else if(delta_t == 3600) {
 		// net incoming radiation (Wm-2)
 		H_net = H_net * 3600. / 1e6; // Wm-2 -> MJ/m2/hour
+		G = G * 3600. / 1e6; // Wm-2 -> MJ/m2/hour
 		etp = ( 0.408 * delta * (H_net - G) + gamma * 37. / (temper+273.) * windspeed * (ez_0 - ez) ) /
 								( delta + gamma * (1. + 0.34 * windspeed) );
 		etp = etp / 3600.;
@@ -143,7 +145,7 @@ double et_penmon_ref (
 	}
 	
 	// return in (m/s)
-	return(etp/1000.);
+	return( max(0., etp/1000.) );
 }
 
 
@@ -198,7 +200,7 @@ double et_sw_soil (
 	// soil evaporation
 	double ets = (delta * (H_soil - soilheat) + rho_air * SPHEATMOIST * D_0 / r_sa) / (delta + gamma * (1. + r_ss/r_sa)) / lambda;
 	
-	return(ets/1000.);
+	return( max(0., ets/1000.) );
 }
 
 // sub-function for canopy evaporation (m/s)
@@ -224,7 +226,7 @@ double et_sw_cano (
 	// canopy evaporation
 	double etc = (delta * (A_total - A_s) + rho_air * SPHEATMOIST * D_0 / r_ca) / (delta + gamma * (1. + r_cs/r_ca)) / lambda;
 	
-	return(etc/1000.);
+	return( max(0., etc/1000.) );
 }
 
 // sub-function total evapotranspiration (m/s)
@@ -274,7 +276,7 @@ double et_sw (
 	// compute evapotranspiration rate, eq. 11 (mm/s)
 	double et = (C_c * PM_c + C_s * PM_s) / lambda;
 	
-	return(et/1000.);
+	return( max(0., et/1000.) );
 }
 
 #endif
