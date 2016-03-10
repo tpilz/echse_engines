@@ -256,6 +256,10 @@ double et_pot (
 					daynight = 0;
 			}
 			soilheat = soil_heatflux(H_soil, f_day, f_night, daynight, delta_t);
+		} else {
+			// for simplicity set totalheat equal to soilheat if the latter was given as input and the former is missing (currently hard to interpret and quantify 'totalheat')
+			if (abs(totalheat - na_val) < 0.01)
+				totalheat = soilheat;
 		}
 		
 		// air density (kgm-3)
@@ -299,7 +303,7 @@ double et_pot (
 		if (choice == 13) {
 			
 			// total heat flux (conduction into soil and energy storage in plants and atmophere below reference height; for SW model only)
-			// for simplicity calculate similar to soilheatflux; TODO: better approaches?
+			// for simplicity calculate similar to soilheatflux; TODO: better approaches? Must be larger than soil heat flux?!
 			if (abs(totalheat - na_val) < 0.01) {
 				double daynight = -9999.;
 				if (delta_t < 86400) {

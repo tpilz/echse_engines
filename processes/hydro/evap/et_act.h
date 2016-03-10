@@ -271,6 +271,10 @@ double et_act (
 					daynight = 0;
 			}
 			soilheat = soil_heatflux(H_soil, f_day, f_night, daynight, delta_t);
+		} else {
+			// for simplicity set totalheat equal to soilheat if the latter was given as input and the former is missing (currently hard to interpret and quantify 'totalheat')
+			if (abs(totalheat - na_val) < 0.01)
+				totalheat = soilheat;
 		}
 		
 		// air density (kgm-3)
