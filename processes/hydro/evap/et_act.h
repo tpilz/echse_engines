@@ -329,14 +329,6 @@ double et_act (
 		// Shuttleworth-Wallace
 		if (choice == 13) {
 			
-			// check water content values
-			if( (wc_vol_top < wc_res) || (wc_vol_top > wc_sat) ) {
-				stringstream errmsg;
-				errmsg << "Cannot calculate actual evapotranspiration, unreasonable value of water content at top soil!";
-				except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-				throw(e);
-			}
-			
 			// total heat flux (conduction into soil and energy storage in plants and atmophere below reference height; for SW model only)
 			// for simplicity calculate similar to soilheatflux; TODO: better approaches?
 			if (abs(totalheat - na_val) < 0.01) {

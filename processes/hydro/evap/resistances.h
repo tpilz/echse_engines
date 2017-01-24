@@ -185,11 +185,6 @@ double res_stom_leaf (
 	const double cond_vap,			// Vapour pressure stress factor limiting stomatal conductance [0..1] (-)
 	const double cond_water			// Soil water availability stress factor limiting stomatal conductance [0..1] (-)
 ) {
-	
-	// if res_min set to zero (e.g. to calculate potential ET) return zero
-	if(res_min < 1e-6)
-		return(0.);
-	
 	//maximum conductance (ms-1)
 	double cond_max = 1. / res_min;
 	
@@ -197,10 +192,10 @@ double res_stom_leaf (
 	double cond = cond_max * cond_rad * cond_co2 * cond_temp * cond_vap * cond_water;
 	
 	// return resistance (sm-1)
-	if (cond > 1e-6)
-		return( 1. / cond );
+	if (cond < 1e-10)
+		return( 1.e10 );
 	else
-		return( 1e6 );
+		return( 1. / cond );
 	
 }
 
@@ -230,7 +225,7 @@ double stress_soilwater(
 	// check water content values
 	if( (wc_res < 0.) || (wc_sat > 1.) || (wc_res > wc_sat) || (wc < wc_res) || (wc > wc_sat) ) {
 		stringstream errmsg;
-		errmsg << "Cannot calculate soilwater plant stress factor, unreasonable values of water content and/or water content at saturated and/or residual water content!";
+		errmsg << "Cannot calculate soilwater plant stress factor, unreasonable water content values! wc = " << wc << ", wc_sat = " << wc_sat << ", wc_res = " << wc_res << ".";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e);
 	}
@@ -252,7 +247,7 @@ double stress_soilwater(
 	if(suction < wstressmin)	// no water stress
 		return(1.);
 	else if(suction >= wstressmax)	// maximum water stress
-		return(0.01);
+		return(0.);
 	else	// between begin of and total stomatal closure
 		return( 1. - (suction - wstressmin) / (wstressmax - wstressmin) );
 }
@@ -461,7 +456,7 @@ double res_ss (
 
 double res_cs (
 	const double choice,				// Wich method shall be used?
-	double lai,						// Leaf Area Idex (m2m-2)
+	double lai,									// Leaf Area Idex (m2m-2)
 	const double res_ST,				// Actual stomatal resistance of leaves (sm-1) - in SW a value of 400
 	const double ext,						// Canopy extinction coefficient (-)
 	const double glorad,				// Downward short-wave radiation (above canopy) (W/m2)

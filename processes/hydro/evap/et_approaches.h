@@ -272,7 +272,7 @@ double et_sw (
 	// coefficients, SW eqs. 14, 15 (-)
 	double C_c = 1. / ( 1. + R_c * R_a / (R_s * (R_c + R_a)) );
 	double C_s = 1. / ( 1. + R_s * R_a / (R_c * (R_s + R_a)) );
-	
+
 	// compute evapotranspiration rate, eq. 11 (mm/s)
 	double et = (C_c * PM_c + C_s * PM_s) / lambda;
 	

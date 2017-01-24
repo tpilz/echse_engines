@@ -7,7 +7,7 @@
 // Returns: New storage volume (m3/s) after time step of length dt
 inline double v_new (
   const double v_ini,  // Initial volume (m3)
-  const double k,      // Storage constant (1/s)
+  const double k,      // Storage constant (s)
   const double dt,     // Length of time step (s)
   const double q_in    // Inflow rate (m3/s)
 ) {
