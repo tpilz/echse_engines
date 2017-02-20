@@ -1,0 +1,2 @@
+targetObject	targetVariable	sourceObject	sourceVariable	forwardType
+test1	dummy_in	dummy	dummy	true

@@ -1,0 +1,6 @@
+object	variable	value
+test1	runst_surf_sat	0.
+test1	runst_surf_inf	0.
+test1	runst_surf	0.
+test1	runst_sub	0.
+test1	runst_gw	0.

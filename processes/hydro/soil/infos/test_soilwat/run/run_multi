@@ -1,0 +1,92 @@
+#!/bin/bash
+
+config=$1
+
+# odirs will be created within odir_pref
+
+# percolation
+odir_pref="output_compare_percol"
+odir=( "Storage" "Richards" )
+choice=( 1 2 )
+
+# infiltration
+# odir_pref="output_compare_inf"
+# odir=( "Horton" "Philip" "Green-Ampt" )
+# choice=( 1 2 3 )
+
+# soil retention and conductivity model
+# odir_pref="output_compare_soilmod"
+# odir=( "Van_Genuchten" "Brooks_Corey" "Campbell" )
+# choice=( 1 2 3 )
+
+
+# ode solver
+#odir_pref="output_solver_compare"
+#odir=( "euler_exp_own" "rk2mid_exp_own" "rk4classic_exp_own" "rkck_exp_own" "euler_imp_own" "rk23_exp_gsl" "rk4classic_exp_gsl" "rkf45_exp_gsl" "rkck_exp_gsl" "rk8pd_exp_gsl" "rk23_exp_gsl_adapt" "rk4classic_exp_gsl_adapt" "rkf45_exp_gsl_adapt" "rkck_exp_gsl_adapt" "rk8pd_exp_gsl_adapt" "euler_imp_gsl" "rk2mid_imp_gsl" "rk4classic_imp_gsl" "bs_imp_gsl" "adams_multistep_gsl" "bdf_multistep_gsl" )
+#choice=( 1 2 3 4 5 11 12 13 14 15 21 22 23 24 25 31 32 33 34 35 36 )
+
+
+sharedPar_init="../data/sharedParamNum_test_soilwat_tpl.dat"
+sharedPar_use="../data/sharedParamNum_test_soilwat.dat"
+model="test_soilwat"
+logfile=$model".log"
+errfile=$model".err.html"
+errfmt="html"
+
+############################################################
+
+# loop over dirs
+i=0
+for dirs in ${odir[*]}
+do
+	echo "PROCESSING: $dirs ($[i+1]/${#odir[*]})"
+	# Check config file
+	if [ -z $config ]; then
+		echo "Usage: run <config-file>"
+		exit 1
+	fi
+	if [ ! -e $config ]; then
+		echo "Config file '$config' not found."
+		exit 1
+	fi
+
+	# Check output folder
+	if [ ! -d $odir_pref/$dirs ]; then
+		mkdir -p $odir_pref/$dirs
+	fi
+
+	# Remove old outputs
+	echo "Removing old log and error files..."
+	if [ -e $logfile ]; then rm $logfile; fi
+	if [ -e $errfile ]; then rm $errfile; fi
+	echo "Removing old outputs..."
+	old=$odir_pref/$dirs"/*.txt"
+	ls $old > /dev/null 2>&1
+	if [ "$?" == "0" ]; then rm -I $old; fi
+	old=$odir_pref/$dirs"/*.json"
+	ls $old > /dev/null 2>&1
+	if [ "$?" == "0" ]; then rm -I $old; fi
+	old=$odir_pref/$dirs"/*.dbg"
+	ls $old > /dev/null 2>&1
+	if [ "$?" == "0" ]; then rm -I $old; fi
+
+	# adjust parameter file
+	rm $sharedPar_use
+	sed "s/CHOICE/${choice[i]}/g" $sharedPar_init > $sharedPar_use
+	
+	# Run model
+	echo "Running "$model"..."
+	#valgrind --track-origins=yes --leak-check=yes $model file_control=$config file_log=$logfile file_err=$errfile format_err=$errfmt silent=false outputDirectory=$odir
+	$model file_control=$config file_log=$odir_pref/$dirs/$logfile file_err=$odir_pref/$dirs/$errfile format_err=$errfmt silent=false outputDirectory=$odir_pref/$dirs
+	if (test $? == 0); then
+		echo "OK (0)."
+	else
+		echo "FAILED (1)."
+	fi
+	
+	echo ""
+	echo ""
+	
+	i=$[i+1]
+done
+

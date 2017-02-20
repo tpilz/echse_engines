@@ -1,0 +1,59 @@
+Basic setting
+-------------
+- ECHSE: engine 'test_soilwat'
+- soil: Bruno não Cálcico from Bengue catchment in NE Brazil, 6 horizons (top horizons split into 2 in ECHSE), profile depth: 74 cm
+	- vertical discretisation of Hydrus is much finer by default!
+- infiltration model: 3: Green-Ampt two-stage for layered soil
+- percolation: 2: Matric potential gradient (simple vertical Richards' equation)
+- soil retention model: 1: Van Genuchten
+- ode solver: 36: linear multistep backward differentiation formula (BDF) method in Nordsieck form
+- forcing: different rainfall impulses with different intensities within the first two days (total: 134 mm)
+- hourly time steps in ECHSE; Hydrus: adaptive
+- initial soil moisture states set to field capacity
+
+
+Comparison with hydrus
+----------------------
+- ECHSE with basic setting vs. Hydrus 1D with same soil parameterisation as used for ECHSE
+- evolution of matric potential and unsaturated hydraulic conductivity matched well by ECHSE (i.e., similar to Hydrus)
+- cumulated infiltration similar: ~64mm (Hydrus) vs. ~59mm (ECHSE)
+- percolation: peak of Hydrus (mm/h) lower and a little more delayed compared to ECHSE but almost exactly matching falling limb
+- surface runoff: 
+	- only after first and heavy rainfall event (100mm/h) in both models
+	- ~73mm (Hydrus) vs. ~64mm (ECHSE)
+- soil water content evolution:
+	- very similar (peak for ECHSE higher)
+	- horizont-wise evolution matches quite well
+
+
+Influence of vertical resolution
+--------------------------------
+- tried more coarse and finer vertical resolutions in ECHSE
+	- coarse: 5 horizonts (first horizon not sub-divided)
+	- fine: 10 horizons (every horizon split into two with the same parameterisation)
+	- hyper: 20 horizons (every horizon split into four with the same parameterisation)
+- coarse resolution: higher infiltration, less surface runoff, more rapid percolation
+- finer resolution: less infiltration, more surface runoff, delayed percolation
+
+
+Influence of temporal resolution
+--------------------------------
+- daily rainfall input but hourly simulation time steps in ECHSE
+	- daily rainfall sum equally distributed to hours of the day
+	- much more infiltration, no surface runoff, more and more rapid percolation, soil water content exceeds upper limit
+- different simulation time steps in ECHSE (rainfall input adjusted accordingly
+	- finer resolution: more infiltration, infiltration into deeper horizons, higher percolation, less surface runoff
+
+
+Parameter kscal
+---------------
+- influence of scaling parameter for saturated hydraulic conductivity 'scale_ks'
+	- ksat_eff = ksat / scale_ks
+	- introduced in WASA to compensate for underestimated rainfall intensities when running the model with daily time steps
+	- scale_ks determined as the ratio of average rainfall intensities of high resolution data to average rainfall intensities of data with model temporal resolution
+	- value of 15 determined for Ceará, NE Brazil
+	- can also be calibrated
+- results:
+	- almost no impact on simulated infiltration and surface runoff volumes; large impact on percolation
+	- soil water movement appears to be strongly delayed, water stays in soil profile for longer time
+	- no compensation effect can be observed when comparing to hourly simulations

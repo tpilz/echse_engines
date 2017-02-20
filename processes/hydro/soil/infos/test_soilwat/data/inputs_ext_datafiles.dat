@@ -1,0 +1,14 @@
+
+# Specification of files from which the models' external inputs is to be read.
+# For each external variable (used by any class), a single record is required.
+
+# 'variable': string - Name of the external input variable.
+# 'file':     string - File containing the time series data for that variable.
+# 'sums':     bool - Treat data as sums (not as averages) when disaggregating?
+# 'past':     bool - Do times refer to the end (not the start) of an interval? 
+
+variable      sums     past    file
+
+#inflow        false    false    ../data/inputs_ts.dat
+#inflow        false    false    ../data/inputs_ts_half-daily.dat
+inflow        false    false    ../data/inputs_ts_daily.dat

@@ -1,0 +1,31 @@
+UTC	event
+2016-03-22 12:11:22	Logging started.
+2016-03-22 12:11:22	Range checks in data access functions: DISABLED
+2016-03-22 12:11:22	Reading configuration data
+2016-03-22 12:11:22	Querying frequently used control data
+2016-03-22 12:11:22	Setting number of threads
+2016-03-22 12:11:22	Number of threads (if >=1 parallel objects): 1
+2016-03-22 12:11:22	Instantiating object groups
+2016-03-22 12:11:22	Instantiating objects
+2016-03-22 12:11:22	Initializing object outputs
+2016-03-22 12:11:22	Switching on debug mode for selected objects
+2016-03-22 12:11:22	Setting times of state output
+2016-03-22 12:11:22	Assigning simulated inputs to objects (object linkage)
+2016-03-22 12:11:22	Setting object levels
+2016-03-22 12:11:22	Setting up processing tree for selected objects
+2016-03-22 12:11:22	Levels for (optional) parallel processing: 2
+2016-03-22 12:11:22	Reading tables of individual parameter functions
+2016-03-22 12:11:22	Initializing individual parameter functions
+2016-03-22 12:11:22	Clearing tables of individual parameter functions
+2016-03-22 12:11:22	Reading tables of individual scalar parameters
+2016-03-22 12:11:22	Initializing individual scalar parameters
+2016-03-22 12:11:22	Clearing tables of individual scalar parameters
+2016-03-22 12:11:22	Setting shared parameter functions
+2016-03-22 12:11:22	Setting shared scalar parameters
+2016-03-22 12:11:22	Initializing time series of external variables
+2016-03-22 12:11:22	Assigning external time series to objects
+2016-03-22 12:11:22	Setting initial values of scalar state variables
+2016-03-22 12:11:22	Setting initial values of vector state variables
+2016-03-22 12:11:22	Initializing simulation time
+2016-03-22 12:11:22	Simulation started
+2016-03-22 12:11:47	Stopped due to exception. See traceback for details.

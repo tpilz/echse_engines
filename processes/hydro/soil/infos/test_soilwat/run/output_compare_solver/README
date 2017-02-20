@@ -1,0 +1,24 @@
+approaches which terminated successfully:
+- adams_multistep_gsl
+- bdf_multistep_gsl
+- bs_imp_gsl
+- euler_exp_own
+- rk2mid_exp_own
+- rk4classic_exp_gsl
+- rk4classic_exp_gsl_adapt
+- rk4classic_exp_own
+- rk8pd_exp_gsl
+- rk8pd_exp_gsl_adapt
+- rk23_exp_gsl
+- rk23_exp_gsl_adapt
+- rkck_exp_gsl
+- rkck_exp_gsl_adapt
+- rkf45_exp_gsl
+- rkf45_exp_gsl_adapt
+
+approaches that did not converge within defined limits (100,000 iterations, accuracy: 1e-3):
+- euler_imp_gsl
+- euler_imp_own
+- rk4classic_imp_gsl
+- rk2mid_imp_gsl
+- rkck_exp_own

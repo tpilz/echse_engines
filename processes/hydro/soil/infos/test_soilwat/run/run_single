@@ -1,0 +1,60 @@
+#!/bin/bash
+
+config=$1
+
+odir_base="out"
+odir=$odir_base	#/$config
+
+model="test_soilwat"
+logfile=$model".log"
+errfile=$model".err.html"
+errfmt="html"
+
+############################################################
+
+# Check config file
+if [ -z $config ]; then
+  echo "Usage: run <config-file>"
+  exit 1
+fi
+if [ ! -e $config ]; then
+  echo "Config file '$config' not found."
+  exit 1
+fi
+
+# Check output folder
+if [ ! -d $odir_base ]; then
+  echo "Top-level output folder '$odir_base' does not exist."
+  exit 1
+fi
+if [ ! -d $odir ]; then
+  mkdir -p $odir
+fi
+
+# Remove old outputs
+echo "Removing old log and error files..."
+if [ -e $logfile ]; then rm $logfile; fi
+if [ -e $errfile ]; then rm $errfile; fi
+echo "Removing old outputs..."
+old=$odir"/*.txt"
+ls $old > /dev/null 2>&1
+if [ "$?" == "0" ]; then rm -I $old; fi
+old=$odir"/*.json"
+ls $old > /dev/null 2>&1
+if [ "$?" == "0" ]; then rm -I $old; fi
+old=$odir"/*.dbg"
+ls $old > /dev/null 2>&1
+if [ "$?" == "0" ]; then rm -I $old; fi
+
+# Run model
+echo "Running "$model"..."
+#valgrind --track-origins=yes --leak-check=yes $model file_control=$config file_log=$logfile file_err=$errfile format_err=$errfmt silent=false outputDirectory=$odir
+$model file_control=$config file_log=$logfile file_err=$errfile format_err=$errfmt silent=false outputDirectory=$odir
+if (test $? == 0); then
+  echo "OK (0)."
+  exit 0
+else
+  echo "FAILED (1)."
+  exit 1
+fi
+

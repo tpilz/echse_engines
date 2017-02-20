@@ -1,0 +1,7 @@
+# Values of scalar state variables at: 2001-07-01 00:00:00
+object	variable	value
+test1	runst_surf_sat	0
+test1	runst_surf_inf	0.0622689
+test1	runst_surf	0.0622689
+test1	runst_sub	0
+test1	runst_gw	0.0450511

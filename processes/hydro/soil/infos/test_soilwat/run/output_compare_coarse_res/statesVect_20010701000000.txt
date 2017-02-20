@@ -1,0 +1,17 @@
+# Values of vector state variables at: 2001-07-01 00:00:00
+object	variable	index	value
+test1	wc	0	0.217461
+test1	wc	1	0.420163
+test1	wc	2	0.35356
+test1	wc	3	0.308053
+test1	wc	4	0.200228
+test1	mat_pot	0	1.03317
+test1	mat_pot	1	0.860506
+test1	mat_pot	2	0.737203
+test1	mat_pot	3	0.633246
+test1	mat_pot	4	0.553381
+test1	k_u	0	5.54437e-10
+test1	k_u	1	2.23645e-08
+test1	k_u	2	2.10997e-09
+test1	k_u	3	1.1938e-09
+test1	k_u	4	5.62983e-10

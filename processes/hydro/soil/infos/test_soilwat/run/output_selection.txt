@@ -1,0 +1,17 @@
+#
+# Selection of output models and variables.
+# 
+# Required columns are:
+#   'object':      ID of the object
+#   'variable':   Variable (must be an output of the respective model family)
+#
+# Further columns with meta-information may follow. These columns must also be
+# readable (i.e. properly separated) but the contents is ignored. 
+
+object    variable  digits
+
+test1     run_surf_sat       9
+test1     run_surf_inf       9
+test1     run_surf       9
+test1     run_sub       9
+test1     run_gw       9

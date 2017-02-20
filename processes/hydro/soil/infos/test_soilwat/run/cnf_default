@@ -1,0 +1,67 @@
+
+################################################################################
+# Computational settings
+trap_fpe=true
+#multithread=false
+number_of_threads=1
+singlethread_if_less_than=1
+
+################################################################################
+# Declaration of models (id and group)
+table_objectDeclaration=../data/objDecl.dat
+
+################################################################################
+# Definition of the simulation time window
+
+simStart=2001-01-01 00:00:00
+#simEnd=2001-01-01 06:00:00
+simEnd=2001-07-01 00:00:00
+delta_t=86400
+
+################################################################################
+# Specification of model outputs
+table_selectedOutput=output_selection.txt
+table_debugOutput=output_debug.txt
+table_stateOutput=output_state.txt
+output_columnSeparator=	
+output_lineComment=#
+#outputDirectory=./out/
+outputFormat=tab
+saveFinalState=true
+
+################################################################################
+# Special characters in all input files (except for this control file)
+
+input_columnSeparator=	 ;
+input_lineComment=#
+
+################################################################################
+# Initial values
+
+table_initialValues_scal=../data/init_scal.dat
+table_initialValues_vect=../data/init_vect.dat
+
+
+
+################################################################################
+# Boundary conditions
+table_inputOutputRelations=../data/objLink.dat
+externalInput_bufferSize=1
+table_externalInput_locations=../data/inputs_ext_locations.dat
+table_externalInput_datafiles=../data/inputs_ext_datafiles.dat
+
+################################################################################
+# Class-specific input files
+################################################################################
+
+# dummy parameters
+dummy_numParamsIndividual=../data/dummy_num.dat
+dummy_funParamsIndividual=../data/dummy_fun.dat
+dummy_numParamsShared=../data/dummy_num.dat
+dummy_funParamsShared=../data/dummy_fun.dat
+
+# test_soilwat parameters
+test_soilwat_numParamsIndividual=../data/paramNum_test_soilwat.dat
+test_soilwat_funParamsIndividual=../data/paramFun_test_soilwat.dat
+test_soilwat_numParamsShared=../data/sharedParamNum_test_soilwat.dat
+test_soilwat_funParamsShared=../data/dummy_fun.dat

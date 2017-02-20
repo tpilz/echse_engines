@@ -1,0 +1,40 @@
+UTC	event
+2016-03-22 12:37:49	Logging started.
+2016-03-22 12:37:49	Range checks in data access functions: DISABLED
+2016-03-22 12:37:49	Reading configuration data
+2016-03-22 12:37:49	Querying frequently used control data
+2016-03-22 12:37:49	Setting number of threads
+2016-03-22 12:37:49	Number of threads (if >=1 parallel objects): 1
+2016-03-22 12:37:49	Instantiating object groups
+2016-03-22 12:37:49	Instantiating objects
+2016-03-22 12:37:49	Initializing object outputs
+2016-03-22 12:37:49	Switching on debug mode for selected objects
+2016-03-22 12:37:49	Setting times of state output
+2016-03-22 12:37:49	Assigning simulated inputs to objects (object linkage)
+2016-03-22 12:37:49	Setting object levels
+2016-03-22 12:37:49	Setting up processing tree for selected objects
+2016-03-22 12:37:49	Levels for (optional) parallel processing: 2
+2016-03-22 12:37:49	Reading tables of individual parameter functions
+2016-03-22 12:37:49	Initializing individual parameter functions
+2016-03-22 12:37:49	Clearing tables of individual parameter functions
+2016-03-22 12:37:49	Reading tables of individual scalar parameters
+2016-03-22 12:37:49	Initializing individual scalar parameters
+2016-03-22 12:37:49	Clearing tables of individual scalar parameters
+2016-03-22 12:37:49	Setting shared parameter functions
+2016-03-22 12:37:49	Setting shared scalar parameters
+2016-03-22 12:37:49	Initializing time series of external variables
+2016-03-22 12:37:49	Assigning external time series to objects
+2016-03-22 12:37:49	Setting initial values of scalar state variables
+2016-03-22 12:37:49	Setting initial values of vector state variables
+2016-03-22 12:37:49	Initializing simulation time
+2016-03-22 12:37:49	Simulation started
+2016-03-22 12:37:49	01% done.  Computing time remaining: 0h 00m 00s 
+2016-03-22 12:37:49	02% done.  Computing time remaining: 0h 00m 00s 
+2016-03-22 12:37:49	05% done.  Computing time remaining: 0h 00m 00s 
+2016-03-22 12:37:49	10% done.  Computing time remaining: 0h 00m 00s 
+2016-03-22 12:37:50	20% done.  Computing time remaining: 0h 00m 04s 
+2016-03-22 12:37:50	50% done.  Computing time remaining: 0h 00m 01s 
+2016-03-22 12:37:50	Simulation finished
+2016-03-22 12:37:50	Closing output files
+2016-03-22 12:37:50	Final clean-up
+2016-03-22 12:37:50	Finished successfully after 00h 00m 01s (1s)

@@ -1,0 +1,9 @@
+object	function	col_arg	col_val	file
+test1	hor_depth	position	hor_depth	../data/hor_pars.dat
+test1	ksat	position	k_s	../data/hor_pars.dat
+test1	suc	position	suc	../data/hor_pars.dat
+test1	wc_sat	position	wc_s	../data/hor_pars.dat
+test1	wc_fc	position	wc_fc	../data/hor_pars.dat
+test1	wc_res	position	wc_res	../data/hor_pars.dat
+test1	pores_ind	position	pores_ind	../data/hor_pars.dat
+test1	bubble	position	bubble	../data/hor_pars.dat

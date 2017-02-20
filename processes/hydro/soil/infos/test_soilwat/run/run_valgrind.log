@@ -1,0 +1,64 @@
+Removing old log and error files...
+Removing old outputs...
+Running test_soilwat...
+==15050== Memcheck, a memory error detector
+==15050== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==15050== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==15050== Command: test_soilwat file_control=cnf_default file_log=test_soilwat.log file_err=test_soilwat.err.html format_err=html silent=false outputDirectory=out
+==15050== 
+2016-03-29 15:27:19	Logging started.
+2016-03-29 15:27:19	Range checks in data access functions: DISABLED
+2016-03-29 15:27:19	Reading configuration data
+2016-03-29 15:27:20	Querying frequently used control data
+2016-03-29 15:27:20	Setting number of threads
+2016-03-29 15:27:20	Number of threads (if >=1 parallel objects): 1
+2016-03-29 15:27:20	Instantiating object groups
+2016-03-29 15:27:20	Instantiating objects
+2016-03-29 15:27:20	Initializing object outputs
+2016-03-29 15:27:20	Switching on debug mode for selected objects
+2016-03-29 15:27:20	Setting times of state output
+2016-03-29 15:27:20	Assigning simulated inputs to objects (object linkage)
+2016-03-29 15:27:20	Setting object levels
+2016-03-29 15:27:20	Setting up processing tree for selected objects
+2016-03-29 15:27:20	Levels for (optional) parallel processing: 2
+2016-03-29 15:27:20	Reading tables of individual parameter functions
+2016-03-29 15:27:20	Initializing individual parameter functions
+2016-03-29 15:27:20	Clearing tables of individual parameter functions
+2016-03-29 15:27:20	Reading tables of individual scalar parameters
+2016-03-29 15:27:20	Initializing individual scalar parameters
+2016-03-29 15:27:20	Clearing tables of individual scalar parameters
+2016-03-29 15:27:20	Setting shared parameter functions
+2016-03-29 15:27:20	Setting shared scalar parameters
+2016-03-29 15:27:20	Initializing time series of external variables
+2016-03-29 15:27:20	Assigning external time series to objects
+2016-03-29 15:27:20	Setting initial values of scalar state variables
+2016-03-29 15:27:20	Setting initial values of vector state variables
+2016-03-29 15:27:20	Initializing simulation time
+2016-03-29 15:27:20	Simulation started
+2016-03-29 15:27:25	01% done.  Computing time remaining: 0h 08m 09s 
+2016-03-29 15:27:25	02% done.  Computing time remaining: 0h 04m 05s 
+2016-03-29 15:27:27	05% done.  Computing time remaining: 0h 02m 13s 
+2016-03-29 15:27:30	10% done.  Computing time remaining: 0h 01m 30s 
+2016-03-29 15:27:35	20% done.  Computing time remaining: 0h 01m 00s 
+2016-03-29 15:27:51	50% done.  Computing time remaining: 0h 00m 31s 
+2016-03-29 15:28:17	Simulation finished
+2016-03-29 15:28:17	Closing output files
+2016-03-29 15:28:17	Final clean-up
+2016-03-29 15:28:17	Finished successfully after 00h 00m 58s (58s)
+==15050== 
+==15050== HEAP SUMMARY:
+==15050==     in use at exit: 296 bytes in 2 blocks
+==15050==   total heap usage: 607,158 allocs, 607,156 frees, 59,661,785 bytes allocated
+==15050== 
+==15050== LEAK SUMMARY:
+==15050==    definitely lost: 0 bytes in 0 blocks
+==15050==    indirectly lost: 0 bytes in 0 blocks
+==15050==      possibly lost: 0 bytes in 0 blocks
+==15050==    still reachable: 296 bytes in 2 blocks
+==15050==         suppressed: 0 bytes in 0 blocks
+==15050== Reachable blocks (those to which a pointer was found) are not shown.
+==15050== To see them, rerun with: --leak-check=full --show-reachable=yes
+==15050== 
+==15050== For counts of detected and suppressed errors, rerun with: -v
+==15050== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 2 from 2)
+OK (0).
