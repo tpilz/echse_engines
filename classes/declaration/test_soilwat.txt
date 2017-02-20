@@ -1,0 +1,66 @@
+type	name	description	unit
+
+# dummy input (for linkage file; something has to be defined)
+inputSim	dummy_in	dummy input	dimensionless
+
+# external input
+inputExt	inflow	Inflow to soil surface (precipitation - interception + interception precip + surface runoff + snow melt)	m/s
+
+# state variables
+stateVect	wc	Actual water content for each horizon	m3/m3
+stateVect	mat_pot	Matric potential / soil hydraulic head / capillary suction	(m of water) or (100 hPa)
+stateVect	k_u	Actual soil hydraulic conductivity	m/s
+stateScal	runst_surf_sat	Surface runoff: saturation excess	m
+stateScal	runst_surf_inf	Surface runoff: infiltration excess	m
+stateScal	runst_surf	Surface runoff: total	m
+stateScal	runst_sub	Subsurface runoff	m
+stateScal	runst_gw	Groundwater storage	m
+
+# parameters (look-up tables with entry for each soil layer)
+paramFun	hor_depth	Thickness of soil horizon	m
+paramFun	wc_sat	Volumetric water content at saturation	m3/m3
+paramFun	wc_fc	Volumetric water content at field capacity	m3/m3
+paramFun	wc_res	Residual volumetric water content	m3/m3
+paramFun	ksat	Saturated hydraulic conductivity	m/s
+paramFun	suc	Suction at wetting front	m of water or 100 hPa
+paramFun	pores_ind	Pore-size-index	dimensionless
+paramFun	bubble	Bubbling pressure	m of water or 100 hPa
+
+# parameters (numeric)
+paramNum	soil_depth	Depth of soil profile (sum of hor_depth)	m
+paramNum	slopelength	Average slopelength of soil unit (in flow direction)	m
+paramNum	slope	Average slope of soil unit (in flow direction)	m/m
+paramNum	Hort_ini	Horton parameter: initial infiltration rate	m/s
+paramNum	Hort_end	Horton parameter: final infiltration rate	m/s
+paramNum	Hort_k	Horton parameter: decay constant	1/s
+paramNum	Phil_s	Philip parameter: Sorptivity; calculated internally if set to NA	ms^{-1/2}
+paramNum	Phil_a	Philip parameter: second term parameter; calculated internally if set to NA	m/s
+
+# shared parameters
+sharedParamNum	scale_ks	Scaling factor for saturated hydraulic conductivity (ks_scale = ks / scale_ks) to account for underestimation of rainfall intensities (as in WASA)	dimensionless
+sharedParamNum	Phil_cal	Philip parameter: calibration paremter for Phil_a if this is NA (fraction of ksat), should be within [0.2..1.0]	dimensionless
+sharedParamNum	var1	Fraction of wc_sat of top soil when area starts becoming saturated	dimensionless
+sharedParamNum	var2	Fraction of wc_sat of top soil (second node)	dimensionless
+sharedParamNum	var3	Fraction of wc_sat of top soil when area is about half saturated	dimensionless
+sharedParamNum	var4	Fraction of wc_sat of top soil (fourth node)	dimensionless
+sharedParamNum	var5	Fraction of wc_sat of top soil when area is completely saturated	dimensionless
+sharedParamNum	frac1	Areal fraction of soil being saturated for wc_sat * var1; typically zero	m2/m2
+sharedParamNum	frac2	Areal fraction of soil being saturated for wc_sat * var2	m2/m2
+sharedParamNum	frac3	Areal fraction of soil being saturated for wc_sat * var3; typically 0.5	m2/m2
+sharedParamNum	frac4	Areal fraction of soil being saturated for wc_sat * var4	m2/m2
+sharedParamNum	frac5	Areal fraction of soil being saturated for wc_sat * var5; tyically 1	m2/m2
+sharedParamNum	ch_inf	Choice: infiltration approach; 1: Horton, 2: Philip, 3: Green-Ampt two-stage for layered soil	dimensionless
+sharedParamNum	ch_perc	Choice: Percolation approach; 1: SWAT (simple storage approach), 2: Matric potential gradient (simple vertical Richards' equation)	dimensionless
+sharedParamNum	ch_soilmod	Choice: soil water retention and conductivity model; 1: Van Genuchten, 2: Brooks and Corey, 3: Campbell	dimensionless
+sharedParamNum	na_val	All input and parameters of this specific numeric value will be treated as 'not available'	dimensionless
+sharedParamNum	ode_accuracy	Accuracy required from ode solver (i.e. absolute error)	unit of state variable
+sharedParamNum	ode_max_iter	Maximum number of sub-steps	dimensionless
+sharedParamNum	ch_odesolve	Choice: method for numerical integration	dimensionless
+
+# output fluxes
+output	saturation	Fraction of saturated area	m2/m2
+output	run_surf_sat	Surface runoff: saturation excess	m/s
+output	run_surf_inf	Surface runoff: infiltration excess	m/s
+output	run_surf	Surface runoff: total	m/s
+output	run_sub	Subsurface runoff	m/s
+output	run_gw	Groundwater recharge	m/s
