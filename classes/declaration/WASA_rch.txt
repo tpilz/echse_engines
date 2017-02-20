@@ -1,0 +1,18 @@
+type	name	description	unit
+
+# Simulated input
+inputSim	q_in	Input flow into river reach	m3/s
+inputSim	pet	Potential evapotranspiration from the associated subbasin around the river reach	m/s
+
+# state variables
+stateVect	uh_q	Outflow at upcomming time steps for unit hydrograph routing approach	m3/s
+
+# parameters
+paramFun	uh	Ordinate values of the unit hydrograph; sum up to one for every reach object	dimensionless
+paramNum	nuh	Number of discrete time steps along the abscissa of the unit hydrograph	dimensionless
+paramNum	chan_len	Length of the river reach	m
+sharedParamNum	choice_route	Flag: Routing (water translation along the river reach) approach	dimensionless
+sharedParamNum	choice_transloss	Flag: Transmission losses calculation approach	dimensionless
+
+# output
+output	q_out	River reach outflow	m3/s

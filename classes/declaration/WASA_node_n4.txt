@@ -1,0 +1,6 @@
+type	name	description	unit
+inputSim	in1	Input	depends
+inputSim	in2	Input	depends
+inputSim	in3	Input	depends
+inputSim	in4	Input	depends
+output	out	Aggregated output	depends

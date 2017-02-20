@@ -1,0 +1,166 @@
+type	name	description	unit
+
+# Simulated input
+inputSim	r_surf_in	Lateral surface inflow	m/s
+inputSim	r_sub_in	Lateral subsurface inflow	m/s
+
+
+# external input
+# Common meteorological variables
+inputExt	precip	Precipitation	m/s
+inputExt	temper	Air temperature	°C
+inputExt	temper_min	Minimum temperature within time step	°C
+inputExt	temper_max	Maximum temperature within time step	°C
+inputExt	glorad	Downward short-wave radiation	W/m2
+inputExt	rhum	Relative humidity	%
+inputExt	wind	Wind speed	m/s
+inputExt	apress	Air pressure	hPa
+inputExt	sundur	Sunshine duration of current day	hours
+inputExt	cloud	Cloudiness	percent
+# Vegetation and land-cover
+inputExt	cano_height	Height of canopy (optional)	m
+inputExt	lai	Leaf area index	m2/m2
+inputExt	alb	Albedo	dimensionless
+inputExt	rootd	Root depth	m
+# Quantities of energy balance (can be calculated internally or given as input)
+inputExt	radex	Incoming radiation at top of atmosphere	W/m2
+inputExt	glorad_max	Maximum downward short-wave radiation	W/m2
+inputExt	rad_net	Net incoming (short-wave + long-wave) radiation	W/m2
+inputExt	rad_net_soil	Net incoming (short-wave + long-wave) radiation hitting the soil surface	W/m2
+inputExt	rad_long	Net incoming long-wave radiation	W/m2
+inputExt	soilheat	Soil heat flux	W/m2
+inputExt	totalheat	Heat conduction into soil AND plants due to physical and biochemical energy storage	W/m2
+# Computational variables
+inputExt	doy	Current day of the year (julian day)	dimensionless
+inputExt	hour	Hour of day in local time (including daylight daving time), range of [0..23]	hour of day
+inputExt	utc_add	Deviation of local time zone from UTC; may vary over the year due to daylight saving time; range of [-12..14]	hours
+
+
+# state variables (mostly needed for internal uses and output control as simulate() needs information from derivsScal())
+stateVect	wc	Actual water content for each horizon	m3/m3
+stateVect	w_eta	Weight for each horizon to distribute actual evapotranspiration outflow	dimensionless
+stateVect	mat_pot	Matric potential / soil hydraulic head / capillary suction	(m of water) or (100 hPa)
+stateVect	k_u	Actual soil hydraulic conductivity	m/s
+stateScal	runst_surf_sat	Surface runoff: saturation excess	m
+stateScal	runst_surf_inf	Surface runoff: infiltration excess	m
+stateScal	runst_surf	Surface runoff: total	m
+stateScal	runst_sub	Subsurface runoff	m
+stateScal	runst_gw	Groundwater storage	m
+stateScal	v_interc	Water in interception storage	m
+stateScal	s_longrad	State of long-wave radiation; to account for nighttimes in case of sub-daily resolution (specifically the cloudiness correction factor; assume persistency of last daytime value)	W/m2
+stateScal	et_p	Potential evapotranspiration (for output in simulate)	m
+stateScal	et_a	Actual evapotranspiration (for output in simulate)	m
+stateScal	et_i	Evaporation from interception storage (for output in simulate)	m
+stateScal	r_interc	Interception of rainfall (for output in simulate)	m
+
+
+# parameters #
+# Soil parameters (look-up tables with entry for each soil layer)
+paramFun	hor_depth	Thickness of soil horizon	m
+paramFun	wc_sat	Volumetric water content at saturation	m3/m3
+paramFun	wc_fc	Volumetric water content at field capacity	m3/m3
+paramFun	wc_pwp	Volumetric water content at permanent wilting point	m3/m3
+paramFun	wc_res	Residual volumetric water content	m3/m3
+paramFun	ksat	Saturated hydraulic conductivity	m/s
+paramFun	suc	Suction at wetting front	m of water or 100 hPa
+paramFun	pores_ind	Pore-size-index	dimensionless
+paramFun	bubble	Bubbling pressure	m of water or 100 hPa
+# parameters, site-specific (numeric)
+paramNum	frac_area	Areal fraction of SVC in TC	m2/m2
+paramNum	lat	Latitude of location	decimal degrees
+paramNum	lon	Longitude of location	decimal degrees west of Greenwhich, e.g. Greenwich: 0°, New York: 75°, Berlin: 345°
+paramNum	elev	Elevation above sea level	m
+paramNum	soil_depth	Depth of soil profile (sum of hor_depth)	m
+paramNum	soil_dens	Bulk density of top horizon of soil (where evaporation occurs)	kg/m3
+paramNum	slopelength	Average slopelength of soil unit (in flow direction)	m
+paramNum	slope	Average slope of soil unit (in flow direction)	m/m
+paramNum	bedrock	Bedrock under soil profile: 1: yes, drainage into bedrock limited by conductivity of bedrock; 0: no, free drainage below soil profile (matric pot. gradient zero; persistence of conductivity of last soil layer)	dimensionless
+# Vegetation and land-cover
+paramNum	crop_makk	Crop-factor for calculation of pot. evapotransp. after Makkink	dimensionless
+paramNum	crop_faoref	Crop-factor for FAO reference approach	dimensionless
+paramNum	wc_etmax	Parameter giving the volumetric water content where et_act equals et_pot, typically wc_etmax / wc_fk = [0.5..0.8]	m3/m3
+paramNum	intfc	Interception capacity per unit LAI	m
+paramNum	res_leaf_min	Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf	sm-1
+paramNum	wstressmin	Matric potential threshold for water stress effect on resistance (begin of stomata closure)	m of water or 100 hPa
+paramNum	wstressmax	Matric potential threshold for water stress effect on resistance (total stomata closure, wilting point)	m of water or 100 hPa
+paramNum	par_stressHum	Parameter to calculate water vapour deficit stomatal conductance stress factor - in WASA a value of 0.03	1/hPa
+paramNum	glo_half	Solar radiation at which stomatal conductance is half of its maximum (species-specific)	W/m2
+# Infiltration parameters
+paramNum	Hort_ini	Horton parameter: initial infiltration rate	m/s
+paramNum	Hort_end	Horton parameter: final infiltration rate	m/s
+paramNum	Hort_k	Horton parameter: decay constant	1/s
+paramNum	Phil_s	Philip parameter: Sorptivity; calculated internally if set to NA	ms^{-1/2}
+paramNum	Phil_a	Philip parameter: second term parameter; calculated internally if set to NA	m/s
+
+
+# shared parameters
+# Meteorological parameters
+sharedParamNum	h_tempMeas	Height of temperature measurement over ground	m
+sharedParamNum	h_humMeas	Height of relative humidity measurement over ground	m
+sharedParamNum	h_windMeas	Height of wind speed measurement over ground	m
+sharedParamNum	emis_a	Coefficient a for calculation of net emissivity (empirical; between 0.34 and 0.44; for average conditions 0.34 following Maidment, 1993)	dimensionless
+sharedParamNum	emis_b	Coefficient b for calculation of net emissivity (empirical; between -0.14 and -0.25; for average conditions -0.14 following Maidment, 1993)	dimensionless
+sharedParamNum	fcorr_a	Coefficient a for calculation of cloudiness correction factor (empirical; humid areas: 1.00, arid areas: 1.35, Maidment, 1993)	dimensionless
+sharedParamNum	fcorr_b	Coefficient b for calculation of cloudiness correction factor (empirical; humid areas: 0.00, arid areas: -0.35, Maidment, 1993)	dimensionless
+sharedParamNum	radex_a	Angstrom coefficient (share of radex on glorad under clouds; empirical; recommended for average climates: 0.25, , Maidment, 1993)	dimensionless
+sharedParamNum	radex_b	Angstrom coefficient (radex_a+radex_b = share of radex on glorad under clear sky; empirical; recommended for average climates: 0.50, , Maidment, 1993)	dimensionless
+sharedParamNum	f_day	Soil heat flux calculation: Fraction of net_rad over daytime (in case of sub-daily application)	-
+sharedParamNum	f_night	Soil heat flux calculation: Fraction of net_rad over nighttime (in case of sub-daily application)	-
+# Vegetation and land-cover parameters
+sharedParamNum	ext	Canopy extinction coefficient, Beer's law (typically between 0.3 and 0.7)	dimensionless
+sharedParamNum	res_b	Mean boundary layer resistance (in Shuttleworth and Wallace a value of 25)	s/m
+sharedParamNum	drag_coef	Effective value of mean drag coef. of vegetative elements (in Shuttleworth and Gurney a value of 0.07)	dimensionless
+sharedParamNum	rough_bare	Roughness length of bare substrate (in Shuttlewort & Wallace a value of 0.01)	m
+sharedParamNum	eddy_decay	Eddy diffusivity decay constant (in Shuttlewort & Wallace set to 2.5 for agricultural crops)	dimensionless
+sharedParamNum	rss_a	Empirical constant for calculation of soil surface resistance as developed by Domingo et al. (1999) (in WASA set to 26)	dimensionless
+sharedParamNum	rss_b	Empirical constant for calculation of soil surface resistance as developed by Domingo et al. (1999) (in WASA set to -1)	dimensionless
+# Soil water parameters
+sharedParamNum	scale_ks	Scaling factor for saturated hydraulic conductivity (ks_scale = ks / scale_ks) to account for underestimation of rainfall intensities (as in WASA)	dimensionless
+sharedParamNum	Phil_cal	Philip parameter: calibration paremter for Phil_a if this is NA (fraction of ksat), should be within [0.2..1.0]	dimensionless
+sharedParamNum	var1	Fraction of wc_sat of top soil when area starts becoming saturated	dimensionless
+sharedParamNum	var2	Fraction of wc_sat of top soil (second node)	dimensionless
+sharedParamNum	var3	Fraction of wc_sat of top soil when area is about half saturated	dimensionless
+sharedParamNum	var4	Fraction of wc_sat of top soil (fourth node)	dimensionless
+sharedParamNum	var5	Fraction of wc_sat of top soil when area is completely saturated	dimensionless
+sharedParamNum	frac1	Areal fraction of soil being saturated for wc_sat * var1; typically zero	m2/m2
+sharedParamNum	frac2	Areal fraction of soil being saturated for wc_sat * var2	m2/m2
+sharedParamNum	frac3	Areal fraction of soil being saturated for wc_sat * var3; typically 0.5	m2/m2
+sharedParamNum	frac4	Areal fraction of soil being saturated for wc_sat * var4	m2/m2
+sharedParamNum	frac5	Areal fraction of soil being saturated for wc_sat * var5; tyically 1	m2/m2
+# Choices
+sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
+sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless
+sharedParamNum	choice_roughLen	Roughness length for momentum transfer, 1: SWAT manual (2011) eqs. 2:2.2.4, 2:2.2.5, 2: Shuttleworth & Gurney (1990) eq. 43	dimensionless
+sharedParamNum	choice_plantDispl	Displacement heigt for a plant, 1: SWAT manual (2011) eq. 2:2.2.7, 2: Shuttleworth & Gurney (1990) eq. 42	dimensionless
+sharedParamNum	choice_gloradmax	Calculation method of glorad_max	dimensionless
+sharedParamNum	choice_inf	Choice: infiltration approach; 1: Horton, 2: Philip, 3: Green-Ampt two-stage for layered soil	dimensionless
+sharedParamNum	choice_perc	Choice: Percolation approach; 1: SWAT (simple storage approach), 2: Matric potential gradient (simple vertical Richards' equation)	dimensionless
+sharedParamNum	choice_soilmod	Choice: soil water retention and conductivity model; 1: Van Genuchten, 2: Brooks and Corey, 3: Campbell	dimensionless
+# Other (numerical integration, NA value, etc.)
+sharedParamNum	na_val	All input and parameters of this specific numeric value will be treated as 'not available'	dimensionless
+sharedParamNum	ode_accuracy	Accuracy required from ode solver (i.e. absolute error)	unit of state variable
+sharedParamNum	ode_max_iter	Maximum number of sub-steps	dimensionless
+sharedParamNum	choice_odesolve	Choice: method for numerical integration	dimensionless
+
+
+# output fluxes; all values are area-weighted for summation in TC; for investigation divide value by areal fraction of SVC in TC!
+# ATTENTION: Fluxes are averages over one time step intervall; Volumes the current state at the end of a time step
+output	saturation	Fraction of saturated area	m2/m2
+output	v_plantwat	Plant available water within rooted zone	m
+output	v_soilwat	Total amount of water in soil profile	m
+output	etp	Potential evapotranspiration	m/s
+output	eta	Actual evapotranspiration (WITHOUT interception evaporation)	m/s
+output	eti	Evaporation from interception storage	m/s
+output	interc	Interception rate of rainfall	m/s
+# lateral TC outflow (i.e. flow to down-slope TC or river)
+output	run_surf_sat_tc	Surface runoff: saturation excess	m/s
+output	run_surf_inf_tc	Surface runoff: infiltration excess	m/s
+output	run_surf_tc	Surface runoff: total	m/s
+output	run_sub_tc	Subsurface runoff	m/s
+# lateral SVC outflow (redistribution within TC to neighbour SVCs)
+output	run_surf_sat_svc	Surface runoff: saturation excess	m/s
+output	run_surf_inf_svc	Surface runoff: infiltration excess	m/s
+output	run_surf_svc	Surface runoff: total	m/s
+output	run_sub_svc	Subsurface runoff	m/s
+# percolation out of soil profile
+output	run_gw	Groundwater recharge	m/s

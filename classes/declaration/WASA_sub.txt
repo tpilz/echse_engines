@@ -1,0 +1,39 @@
+type	name	description	unit
+
+# input #
+inputSim	r_river_surf	Inflow to river: surface runoff	m/s
+inputSim	r_river_sub	Inflow to river: sub-surface runoff	m/s
+inputSim	r_river_gw	Groundwater recharge from lowest horizons of SVCs	m/s
+inputSim	v_plantwat_lu	Plant available water within rooted zone	m
+inputSim	v_soilwat_lu	Total water within soil profile	m
+inputSim	v_runstor_lu	Total water within runoff storages	m
+inputSim	etp_lu	Potential_lu evapotranspiration	m/s
+inputSim	eta_lu	Actual evapotranspiration (WITHOUT interception evaporation)	m/s
+inputSim	eti_lu	Evaporation from interception storage	m/s
+inputSim	run_surf_sat_lu	Total surface runoff (river flow + lateral re-distribution): saturation excess	m/s
+inputSim	run_surf_inf_lu	Total surface runoff (river flow + lateral re-distribution): infiltration excess	m/s
+inputSim	run_sub_lu	Total subsurface runoff (river flow + lateral re-distribution)	m/s
+inputSim	run_gw_lu	Groundwater recharge	m/s
+
+# parameters #
+paramNum	area	Subbasin area	km2
+
+# output #
+# ATTENTION: Fluxes are averages over one time step intervall; Volumes the current state at the end of a time step
+output	r_out_surf	Surface runoff, i.e. river contribution	m3/s 
+output	r_out_inter	Interflow / sub-surface runoff, i.e. river contribution	m3/s 
+output	r_out_base	Baseflow / groundwater contribution to runoff, i.e. river contribution	m3/s 
+output	r_out_total	Total runoff, i.e. river contribution	m3/s 
+
+# output normalised to a specific subbain's area, not the whole catchment!
+# for catchment output you need to sum subbasin outputs and weight them with the subbasins' areal fractions
+output	v_plantwat	Plant available water within rooted zone	m
+output	v_soilwat	Total amount of water in soil profile	m
+output	v_runstor	Total amount of water in runoff storages	m
+output	etp	Potential evapotranspiration	m/s
+output	eta	Actual evapotranspiration (WITHOUT interception evaporation)	m/s
+output	eti	Evaporation from interception storage	m/s
+output	run_surf_sat	Total surface runoff (river flow + lateral re-distribution): saturation excess	m/s
+output	run_surf_inf	Total surface runoff (river flow + lateral re-distribution): infiltration excess	m/s
+output	run_sub	Total subsurface runoff (river flow + lateral re-distribution)	m/s
+output	run_gw	Groundwater recharge	m/s

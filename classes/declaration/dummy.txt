@@ -1,0 +1,2 @@
+type	name	description	unit
+output	dummy	dummy	dummy

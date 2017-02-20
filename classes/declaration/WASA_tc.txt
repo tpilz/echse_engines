@@ -1,0 +1,57 @@
+type	name	description	unit
+
+# Simulated input #
+# flow from upslope TC
+inputSim	r_latsur_up	Lateral surface flow coming from upslope TC (related to area of upstream TC)	m/s
+inputSim	r_latsub_up	Lateral subsurface flow coming from upslope TC (related to area of upstream TC)	m/s
+
+# flow of this TC for distribution to downslope TC or river
+inputSim	r_latsur_inf_tc	Lateral infiltration-excess surface flow generated on SVCs for redistribution to other TCs	m/s
+inputSim	r_latsur_sat_tc	Lateral saturation-excess surface flow generated on SVCs for redistribution to other TCs	m/s
+inputSim	r_latsub_tc	Lateral subsurface flow generated on SVCs for redistribution to other TCs	m/s
+
+# flow of this TC for re-distribution within this TC
+inputSim	r_latsur_inf_svc	Lateral infiltration-excess surface flow generated on SVCs for redistribution to other SVCs in this TC	m/s
+inputSim	r_latsur_sat_svc	Lateral saturation-excess surface flow generated on SVCs for redistribution to other SVCs in this TC	m/s
+inputSim	r_latsub_svc	Lateral subsurface flow generated on SVCs for redistribution to other SVCs in this TC	m/s
+
+# SVC fluxes for later summation in LU (not directly used herein)
+inputSim	plantwat_svc	Plant available water within rooted zone (area-weighted from SVCs of tis TC)	m
+inputSim	soilwat_svc	Total water within soil profile (area-weighted from SVCs of tis TC)	m
+inputSim	etp_svc	Potential evapotranspiration (area-weighted from SVCs of tis TC)	m/s
+inputSim	eta_svc	Actual evapotranspiration (area-weighted from SVCs of tis TC)	m/s
+inputSim	eti_svc	Evapotranspiration from interception storage (area-weighted from SVCs of tis TC)	m/s
+inputSim	run_gw_svc	Groundwater recharge (area-weighted from SVCs of tis TC)	m/s
+inputSim	sat_svc	Fraction of saturated area	m2/m2
+
+
+# parameters #
+paramNum	position	Relative position along hillslope counting from top	dimensionless
+paramNum	no_tc	Number of TCs within this LU	dimensionless
+paramFun	pos2area	Function to determine the areal fraction of a TC given its position in the current LU	dimensionless
+
+
+# output #
+# ATTENTION: Fluxes are averages over one time step intervall; Volumes the current state at the end of a time step
+# to next donwslope TC; area-weighted for re-scaling in downslope TC; for investigation divide value by areal fraction of TC in LU
+output	r_latsur_tc_out	Lateral surface outflow to downslope TC	m/s
+output	r_latsub_tc_out	Lateral subsurface outflow to downslope TC	m/s
+
+# re-distribution within this TC
+output	r_latsur_svc_out	Lateral surface outflow to SVCs in this TC	m/s
+output	r_latsub_svc_out	Lateral subsurface outflow to SVCs in this TC	m/s
+
+# contribution to river flow; area-weighted for summation in LU; for investigation divide value by areal fraction of TC in LU
+output	r_river_surf	Inflow to river (i.e. subbasin outlet): surface runoff	m/s
+output	r_river_sub	Inflow to river (i.e. subbasin outlet): sub-surface runoff	m/s
+
+# general output; all values are area-weighted for summation in LU; for investigation divide value by areal fraction of TC in LU!
+output	v_plantwat	Plant available water within rooted zone	m
+output	v_soilwat	Total amount of water in soil profile	m
+output	etp	Potential evapotranspiration	m/s
+output	eta	Actual evapotranspiration (WITHOUT interception evaporation)	m/s
+output	eti	Evaporation from interception storage	m/s
+output	run_surf_sat	Total surface runoff: saturation excess	m/s
+output	run_surf_inf	Total surface runoff: infiltration excess	m/s
+output	run_sub	Total subsurface runoff	m/s
+output	run_gw	Groundwater recharge	m/s
