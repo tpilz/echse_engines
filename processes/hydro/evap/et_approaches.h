@@ -102,7 +102,7 @@ double et_penmon_ref (
 ) {
 	
 	// calculate windspeed at 2 m reference height if needed
-	if(abs(h_windMeas - 2.) < 0.01)
+	if(abs(h_windMeas - 2.) > 0.01)
 		windspeed = windspeed * (4.87 / log(67.8 * h_windMeas - 5.42));
 	
 	airpress = airpress/10.; // hPa -> kPa
