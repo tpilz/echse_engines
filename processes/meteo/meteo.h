@@ -425,7 +425,7 @@ double rad_extraterr_hourly (
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
-	if ( (utc_add < 0) || (utc_add > 23) ) {
+	if ( (utc_add < -12) || (utc_add > 14) ) {
 		stringstream errmsg;
 		errmsg << "Computation of extraterrestrial radiation (hourly): Required deviation from UTC not in the accepted range of [-12..14]!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
