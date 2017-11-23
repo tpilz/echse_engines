@@ -7,7 +7,7 @@ inputSim	r_sub_in	Lateral subsurface inflow	m/s
 
 # external input
 # Common meteorological variables
-inputExt	precip	Precipitation	m/s
+inputExt	precip	Precipitation	mm
 inputExt	temper	Air temperature	°C
 inputExt	temper_min	Minimum temperature within time step	°C
 inputExt	temper_max	Maximum temperature within time step	°C

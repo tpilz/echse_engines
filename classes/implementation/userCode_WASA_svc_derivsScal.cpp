@@ -1,6 +1,9 @@
 //////////////////////////////////////////////////////////
 // INTERNAL VARIABLES AND CONSTANTS
 //////////////////////////////////////////////////////////
+// convert precipitation sum into a flux (averaged over timestep) (mm -> m/s)
+const double prec_flux = inputExt(precip) / 1000. / delta_t;
+
 // NA values
 const double naval = sharedParamNum(na_val);
 
@@ -95,10 +98,10 @@ for (unsigned int i=0; i<nh; i++) {
 // SURFACE INFLOW (m/s)
 //////////////////////////////////////////////////////////
 // calculate interception of precipitation (m/s)
-double r_inter = intercept(inputExt(precip), inputExt(lai), paramNum(intfc), max(0., u[INDEX_v_interc]), delta_t);
+double r_inter = intercept(prec_flux, inputExt(lai), paramNum(intfc), max(0., u[INDEX_v_interc]), delta_t);
 
 // calculate soil surface inflow (m/s)
-double in = inputExt(precip) - r_inter + inputSim(r_surf_in);
+double in = prec_flux - r_inter + inputSim(r_surf_in);
 
 
 
