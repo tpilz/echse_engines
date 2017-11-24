@@ -445,10 +445,10 @@ double rad_extraterr_hourly (
 	double b = 2. * PI * (doy - 81.) / 364.;
 	double S_c = 0.1645 * sin(2.*b) - 0.1255 * cos(b) - 0.025 * sin(b);
 	
-  // determine shortest deviation between L_z and L_m on imaginary circle (not quite trivial if, e.g., L_m = 8.3 and L_z = 345)
-  double L_diff1 = L_z - L_m; // 'raw' difference
-  double L_diff2 = fabs(L_diff1) > 180. ? 360. - fabs(L_diff1) : L_diff1; // absolute smallest difference
-  double L_diff = L_diff1 > 0. ? -1.*L_diff2 : L_diff2; // account for sign
+	// determine shortest deviation between L_z and L_m on imaginary circle (not quite trivial if, e.g., L_m = 8.3 and L_z = 345)
+	double L_diff1 = L_z - L_m; // 'raw' difference
+	double L_diff2 = fabs(L_diff1) > 180. ? 360. - fabs(L_diff1) : L_diff1; // absolute smallest difference
+	double L_diff = L_diff1 > 0. ? -1.*L_diff2 : L_diff2; // account for sign
   
 	// solar time angle at the midpoint of the hour of day (rad), eq. 31
 	double hour_mid = hour + 0.5;
@@ -458,12 +458,11 @@ double rad_extraterr_hourly (
 	double w_ini = w_mid - PI / 24.;
 	double w_end = w_mid + PI / 24.;
 	
-	// sunset/sunrise hour angle (rad)
+	// approx. sunset hour angle (rad)
 	double w_s = dayTime_fac(doy,lat);
-	
-	// if no sun is shining (+/- half an hour accuracy) return zero
-	if ( (w_mid < -1.*w_s) || (w_mid > w_s) )
-		return(0.);
+
+	// approx. sunrise hour angle
+	double w_r = -1*w_s;
 	
 	// solar declination (rad)
 	double delta = sol_decl(doy);
@@ -473,13 +472,23 @@ double rad_extraterr_hourly (
 	
 	// latitude in (rad)
 	double phi = lat * PI / 180.;
-	
+
 	// calculate result (Wm-2)
-	double res = 12./PI * SOLAR_C * E_0 * ( (w_end-w_ini) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_end)-sin(w_ini)) );
+	double res = -9999.;
+	if((w_end < w_r) || (w_ini > w_s)) { // night time, no radiation
+	  res = 0.;
+	} else if(w_end > w_s) { // evening, sunset within current hour of day
+	  res = 12./PI * SOLAR_C * E_0 * ( (w_s-w_ini) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_s)-sin(w_ini)) );
+	} else if(w_ini < w_r) { // morning, sunrise within current hour of day
+	  res = 12./PI * SOLAR_C * E_0 * ( (w_end-w_r) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_end)-sin(w_r)) );
+	} else { // sunshine within the whole current hour of day
+	  res = 12./PI * SOLAR_C * E_0 * ( (w_end-w_ini) * sin(delta) * sin(phi) + cos(delta) * cos(phi) * (sin(w_end)-sin(w_ini)) );
+	}
 	
+	// check and return
 	if( res < 0. ) {
 		stringstream errmsg;
-		errmsg << "Computation of extraterrestrial radiation (hourly): Result is negative which is physically not possible. Check your input!";
+		errmsg << "Computation of extraterrestrial radiation (hourly): Result is negative (" << res << " Wm-2) which is physically not possible. Check your input!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
