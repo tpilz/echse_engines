@@ -667,7 +667,7 @@ double f_cloud (
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
-	if( (a + b) > 1.0 ) {
+	if( (a + b - 1.) > 1e-6 ) {
 		stringstream errmsg;
 		errmsg << "Computation of cloudiness correction factor: Parameters (a + b) > 1.0 which is physically not possible!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
@@ -676,9 +676,9 @@ double f_cloud (
 	
 	double res = a * glorad / glorad_max + b;
 
-	if( res > 1. ) {
+	if( (res - 1.) > 1e-6 ) {
 		stringstream errmsg;
-		errmsg << "Computation of cloudiness correction factor: Result is greater one which is physically not possible. Check your input!";
+		errmsg << "Computation of cloudiness correction factor: Result is greater one (" << res <<") which is physically not possible. Check your input!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
