@@ -210,6 +210,7 @@ double et_pot (
 							except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 							throw(e);
 						}
+						radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 					}
 					glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
 					if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
@@ -254,6 +255,7 @@ double et_pot (
 							except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 							throw(e);
 						}
+						radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 					}
 					glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
 					if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
@@ -333,6 +335,7 @@ double et_pot (
 								except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 								throw(e);
 							}
+							radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 						}
 						glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
 						if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
