@@ -213,12 +213,12 @@ double et_pot (
 						radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 					}
 					glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
-					if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
-						stringstream errmsg;
-						errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
-						except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-						throw(e);
-					}
+					// if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
+					// 	stringstream errmsg;
+					// 	errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
+					// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+					// 	throw(e);
+					// }
 					glorad_max = max(glorad_max, glorad);
 				}
 				H_long = net_longrad(temper,rhum,glorad,glorad_max,emis_a,emis_b,fcorr_a,fcorr_b);
@@ -258,12 +258,12 @@ double et_pot (
 						radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 					}
 					glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
-					if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
-						stringstream errmsg;
-						errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
-						except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-						throw(e);
-					}
+					// if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
+					// 	stringstream errmsg;
+					// 	errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
+					// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+					// 	throw(e);
+					// }
 					glorad_max = max(glorad_max, glorad);
 				}
 				if (glorad_max > 1e-6)
@@ -338,12 +338,12 @@ double et_pot (
 							radex = max(radex, glorad); // minimum equal to glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 						}
 						glorad_max = calc_glorad_max(ch_gloradmax, radex, radex_a, radex_b, elev);
-						if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
-							stringstream errmsg;
-							errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
-							except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-							throw(e);
-						}
+						// if (glorad_max < (glorad-50.)) { // tolerate small discrepancies due to uncertainties in input measurement and calculation of radex
+						// 	stringstream errmsg;
+						// 	errmsg << "Calculated maximum short-wave radiation (" << glorad_max << " Wm-2)  is (much) lower than actual short-wave radiation (" << glorad << " Wm-2)! Check your radiation input and parameters!";
+						// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+						// 	throw(e);
+						// }
 						glorad_max = max(glorad_max, glorad);
 					}
 					if (glorad_max > 1e-6)
