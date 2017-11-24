@@ -32,7 +32,9 @@ if(delta_t < 86400) {
 			if ( abs(i_radex - sharedParamNum(na_val)) < 0.01 )
 				i_radex = rad_extraterr_hourly(inputExt(doy), paramNum(lat), inputExt(hour), inputExt(utc_add), paramNum(lon));
 			
+			i_radex = max(i_radex, inputExt(glorad)); // minimum equal to measured glorad; might be smaller during sunrise/sunset hours due to uncertainties in calculation
 			i_glorad_max = calc_glorad_max(sharedParamNum(choice_gloradmax), i_radex, sharedParamNum(radex_a), sharedParamNum(radex_b), paramNum(elev));
+			i_glorad_max = max(i_glorad_max, inputExt(glorad)); 
 		}
 		// if i_glorad_max is very small assume nighttime and do not update state of longrad (i.e. assume persistance of cloudiness correction factor over nighttime)
 		// take 5 W/m2 as "small" (although this is somewhat arbitrary) to avoid impact of atmospheric disturbances during low sun angle
