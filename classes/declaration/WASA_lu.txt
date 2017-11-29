@@ -41,6 +41,7 @@ output	r_out_base	Baseflow / groundwater contribution to runoff, i.e. river cont
 
 output	v_plantwat	Plant available water within rooted zone	m
 output	v_soilwat	Total amount of water in soil profile	m
+# if choice_runconc > 1 (the WASA approach) this only includes gw storage; if choice_gw <= 0 this is "deep gw" which is lost from the model domain
 output	v_runstor	Total amount of water in runoff storages	m
 output	etp	Potential evapotranspiration	m/s
 output	eta	Actual evapotranspiration (WITHOUT interception evaporation)	m/s
