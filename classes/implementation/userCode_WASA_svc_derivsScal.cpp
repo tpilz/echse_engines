@@ -120,7 +120,7 @@ double vol_ref = -9999.;
 // distribute inflow to soil layers
 for (unsigned int i=0; i<nh; i++) {
 	w_depth[i] = paramFun(hor_depth,i+1)/paramNum(soil_depth);
-	inflow = inputSim(r_surf_in) * w_depth[i];
+	inflow = inputSim(r_sub_in) * w_depth[i];
 	// excess goes to subsurface outflow
 	vol_ref = max( 0., (paramFun(wc_sat,i+1) - u[ns+i]) * paramFun(hor_depth,i+1) );
 	if(inflow > vol_ref){
