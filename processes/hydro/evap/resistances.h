@@ -247,7 +247,7 @@ double stress_soilwater(
 	if(suction < wstressmin)	// no water stress
 		return(1.);
 	else if(suction >= wstressmax)	// maximum water stress
-		return(0.);
+		return(0.01); // minimum stress factor (at maximum water stress) as defined in WASA
 	else	// between begin of and total stomatal closure
 		return( 1. - (suction - wstressmin) / (wstressmax - wstressmin) );
 }
@@ -350,7 +350,7 @@ double res_aa (
 	}
 
 	// Shuttleworth & Wallace (1985) eq. 27
-	return( ( log((h_windMeas-h_plantDispl) / rough_len) / pow(KARMAN,2) * windspeed ) * 
+	return( ( log((h_windMeas-h_plantDispl) / rough_len) / (pow(KARMAN,2) * windspeed) ) * 
 					( ( log((h_windMeas-h_plantDispl) / (cano_height-h_plantDispl)) ) +
 						( cano_height / (eddy_decay * (cano_height-h_plantDispl)) ) *
 						( exp(eddy_decay * (1. - (h_plantDispl+rough_len) / cano_height)) - 1. )
@@ -405,7 +405,7 @@ double res_sa (
 	}
 	
 	// Shuttlewort & Wallace (1985) eq. 26
-	return( ( log((h_windMeas-h_plantDispl) / rough_len) / pow(KARMAN,2) * windspeed ) * 
+	return( ( log((h_windMeas-h_plantDispl) / rough_len) / (pow(KARMAN,2) * windspeed) ) * 
 					( cano_height / (eddy_decay * (cano_height-h_plantDispl)) ) *
 					( exp(eddy_decay * (1. - rough_bare / cano_height)) - exp(eddy_decay * (1. - (h_plantDispl+rough_len) / cano_height)) )
 	);
