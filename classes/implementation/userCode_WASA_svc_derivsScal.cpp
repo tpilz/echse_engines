@@ -207,7 +207,10 @@ double r_etp = et_pot (
 double r_eti = min(r_etp, u[INDEX_v_interc]/delta_t);
 
 // actual evapotranspiration (m/s)
-double r_eta = et_act (
+double r_eta = -9999.;
+double r_etas = -9999.;
+double r_etac = -9999.;
+et_act (
 // Parameters and variables needed specifically for et_act()
 	max(min(wc_top, paramFun(wc_sat, 1)), paramFun(wc_res, 1)) - paramFun(wc_res, 1),													// Actual volumetric soil water content at topmost horizon (m3/m3)
 	max(min(wc_root, wcs_root), wcr_root),					// Actual volumetric soil water content of the root zone (m3/m3)
@@ -281,8 +284,30 @@ double r_eta = et_act (
 	sharedParamNum(choice_rcs),											// Flag: canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA
 	sharedParamNum(choice_roughLen), 								// Flag: Roughness length for momentum transfer, 1: SWAT manual (2011) eqs. 2:2.2.4, 2:2.2.5, 2: Shuttleworth & Gurney (1990) eq. 43
 	sharedParamNum(choice_plantDispl),							// Flag: Displacement height for a plant, 1: SWAT manual (2011) eq. 2:2.2.7, 2: Shuttleworth & Gurney (1990) eq. 42
-	sharedParamNum(choice_gloradmax)								// Flag: calculation of maximum incoming short-wave radiation (clear sky), 1: Angstroem, 2: Allen (2005), ASCE standard etp, eq. 19 (based on elevation)
+	sharedParamNum(choice_gloradmax),								// Flag: calculation of maximum incoming short-wave radiation (clear sky), 1: Angstroem, 2: Allen (2005), ASCE standard etp, eq. 19 (based on elevation)
+// output
+	r_eta,												// total actual evapotranspiration (m/s)
+	r_etas,												// actual evapotranspiration from soil surface; SW approach (m/s)
+	r_etac												// actual evapotranspiration from canopy; SW approach (m/s)
 );
+
+// SW approach was selected, divide eta into flux from bare soil and vegetation
+if ( abs(sharedParamNum(choice_et) - 13.) < 0.01 ) {
+	// limit to water content available for evaporation
+	// TODO: shouldn't that implicitly be done by scaling of resistance parameters? But still more water is substracted from the soil than is available. Maybe a numerical (or resolution) problem?!
+	double wc_et = max(min(wc_top, paramFun(wc_sat, 1)), paramFun(wc_res, 1)) - paramFun(wc_res, 1);
+	r_etas = min(r_etas, wc_et * paramFun(hor_depth,1)/delta_t);
+	//r_etas = 0.;
+	// update soil moisture of uppermost horizon
+	flows[0] -= r_etas;
+	// limit to actual usable field capacity of root zone
+	// TODO: shouldn't that implicitly be done by scaling of resistance parameters? But still more water is substracted from the soil than is available. Maybe a numerical (or resolution) problem?!
+	double wc_nfc = min(wc_root, wcf_root);
+	wc_nfc = max(wc_nfc - wcp_root, 0.);
+	r_etac = min(r_etac, wc_nfc*rootdepth/delta_t);
+	// treat r_etac like r_eta for the other approaches
+	r_eta = r_etac;
+}
 
 // first evaporates interception storage; may limit actual et
 r_eta = min(r_eta, r_etp - r_eti);
@@ -488,7 +513,10 @@ dudt[INDEX_runst_sub] = subsurf;
 dudt[INDEX_runst_gw] = gw_rch;
 // et storages
 dudt[INDEX_v_interc] = r_inter - r_eti;
-dudt[INDEX_et_a] = r_eta;
+if(r_etas < -99.)
+	dudt[INDEX_et_a] = r_eta;
+else
+	dudt[INDEX_et_a] = r_eta + r_etas;
 dudt[INDEX_et_p] = r_etp;
 dudt[INDEX_et_i] = r_eti;
 dudt[INDEX_r_interc] = r_inter;

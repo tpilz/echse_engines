@@ -29,7 +29,7 @@
 // 		13: Shuttleworth-Wallace
 // <tobias.pilz@uni-potsdam.de>, FEB 2015
 ///////////////////////////////////////////////////////////////////////////////
-double et_act (
+void et_act (
 // Parameters and variables needed specifically for et_act()
 	const double wc_vol_top,							// Actual volumetric soil water content at topmost horizon (m3/m3)
 	const double wc_vol_root,							// Actual volumetric soil water content of the root zone (m3/m3)
@@ -103,7 +103,11 @@ double et_act (
 	const int ch_rcs,											// Flag: canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA
 	const int ch_roughLen, 								// Flag: Roughness length for momentum transfer, 1: SWAT manual (2011) eqs. 2:2.2.4, 2:2.2.5, 2: Shuttleworth & Gurney (1990) eq. 43
 	const int ch_plantDispl,							// Flag: Displacement height for a plant, 1: SWAT manual (2011) eq. 2:2.2.7, 2: Shuttleworth & Gurney (1990) eq. 42
-	const int ch_gloradmax								// Flag: calculation of maximum incoming short-wave radiation (clear sky), 1: Angstroem, 2: Allen (2005), ASCE standard etp, eq. 19 (based on elevation)
+	const int ch_gloradmax,								// Flag: calculation of maximum incoming short-wave radiation (clear sky), 1: Angstroem, 2: Allen (2005), ASCE standard etp, eq. 19 (based on elevation)
+// output (here via pointer as multile outputs shall be generated for SW approach)
+	double &r_eta,								// total actual evapotranspiration (m/s)
+	double &r_etas,								// actual evapotranspiration from soil surface; SW approach (m/s)
+	double &r_etac								// actual evapotranspiration from canopy; SW approach (m/s)
 ) {
 	
 // PRE-PROCESSING FOR ALL APPROACHES
@@ -330,7 +334,10 @@ double et_act (
 		
 		// Penman-Monteith
 		if (choice == 11) {
-			return(et_penmon(lambda,delta,H_net,soilheat,rho_air,ez_0,ez,gamma,r_c,r_a));
+			r_eta = et_penmon(lambda,delta,H_net,soilheat,rho_air,ez_0,ez,gamma,r_c,r_a);
+			r_etas = -9999.;
+			r_etac = -9999.;
+			return;
 		}
 		
 		// FAO reference evapotranspiration for reference grass surface
@@ -400,7 +407,21 @@ double et_act (
 			double theta_grav = wc_vol_top * 1000. / soil_dens; // density of water (set one) divided by bulk density of soil = maximum possible gravimetric water content
 			double r_ss = res_ss(theta_grav, rss_a, rss_b);
 			
-			return(et_sw(lambda,delta,H_net,H_soil,totalheat,soilheat,rho_air,ez_0,ez,gamma,r_c,r_ca,r_ss,r_sa,r_aa));
+			// calculate total evapotranspiration
+			r_eta = et_sw(lambda,delta,H_net,H_soil,totalheat,soilheat,rho_air,ez_0,ez,gamma,r_c,r_ca,r_ss,r_sa,r_aa);
+
+			// calculate vapor pressure deficit at reference/measurement height (hPa)
+			double D = ez_0 - ez;
+
+			// vapour pressure deficit at canopy source height (hPa)
+			double D_0 = vapPressDeficit_canopy(H_net, totalheat, gamma, delta, lambda, D, r_aa, r_eta, rho_air);
+
+			// r_eta from soil surface
+			r_etas = et_sw_soil(lambda, delta, H_soil, soilheat, rho_air, D_0, gamma, r_ss, r_sa);
+
+			// r_eta from canopy
+			r_etac = et_sw_cano(lambda, delta, H_net, H_soil, totalheat, soilheat, rho_air, D_0, gamma, r_c, r_ca);
+			return;
 		}
 		
 	}
@@ -418,7 +439,10 @@ double et_act (
 	double f_moist = min(1., max(0., (wc_vol_root - wc_pwp)/(wc_etmax - wc_pwp) ));
 	
 	// return eta
-	return(etp * f_moist);
+	r_eta = etp * f_moist;
+	r_etas = -9999.;
+	r_etac = -9999.;
+	return;
 	
 	
 	
