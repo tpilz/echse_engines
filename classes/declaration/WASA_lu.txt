@@ -18,9 +18,9 @@ inputSim	run_sub_tc	Total subsurface runoff (river flow + lateral re-distributio
 # parameter #
 paramNum	frac_area	Areal fraction of LU in subbasin	m2/m2
 paramNum	ct_index	Concentration time index (empirical Kirpich formula, for example)	s
-paramNum	str_surf	Parameter to control retention of surface runoff (if ch_runconc = 1)	dimensionless
-paramNum	str_inter	Parameter to control retention of sub-surface runoff (if ch_runconc = 1)	dimensionless
-paramNum	str_base	Parameter to control retention in the ground-water reservoir	dimensionless
+paramNum	str_surf	Calibration parameter controlling retention of surface runoff (if ch_runconc = 1; multiplied by ct_index)	dimensionless
+paramNum	str_inter	Calibration parameter controlling retention of sub-surface runoff (if ch_runconc = 1; multiplied by ct_index)	dimensionless
+paramNum	str_base	Calibration parameter controlling retention in the ground-water reservoir (multiplied by ct_index)	dimensionless
 sharedParamNum	choice_runconc	Choice: Runoff concentration approach; 1: Linear storage (only if one SVC per TC per LU!), 2: Hierarchical redistribution approach by Guentner (2004)	dimensionless
 sharedParamNum	choice_gw	Choice: Groundwater approach; <=0: disabled (recharge is summed and stored for investigation but not furtherly treated), 1: Simple linear storage approach	dimensionless
 
