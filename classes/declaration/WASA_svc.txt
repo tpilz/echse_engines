@@ -115,7 +115,9 @@ sharedParamNum	eddy_decay	Eddy diffusivity decay constant (in Shuttlewort & Wall
 sharedParamNum	rss_a	Empirical constant for calculation of soil surface resistance as developed by Domingo et al. (1999) (in WASA set to 26)	dimensionless
 sharedParamNum	rss_b	Empirical constant for calculation of soil surface resistance as developed by Domingo et al. (1999) (in WASA set to -1)	dimensionless
 # Soil water parameters
-sharedParamNum	scale_ks	Scaling factor for saturated hydraulic conductivity (ks_scale = ks / scale_ks) to account for underestimation of rainfall intensities (as in WASA)	dimensionless
+sharedParamNum	scale_ks	Scaling factor for saturated hydraulic conductivity to account for underestimation of rainfall intensities (as in WASA; ksat_corr = ksat / scale_ks if precip > 0)	dimensionless
+sharedParamNum	scale_ks_a	Extended scaling of ksat: scale_ks = scale_ks * (scale_ks_a/precip + scale_ks_b + 1); set this parameter to <= zero to apply only scale_ks	dimensionless
+sharedParamNum	scale_ks_b	Extended scaling of ksat, see above	dimensionless
 sharedParamNum	Phil_cal	Philip parameter: calibration paremter for Phil_a if this is NA (fraction of ksat), should be within [0.2..1.0]	dimensionless
 sharedParamNum	var1	Fraction of wc_sat of top soil when area starts becoming saturated	dimensionless
 sharedParamNum	var2	Fraction of wc_sat of top soil (second node)	dimensionless
@@ -127,6 +129,8 @@ sharedParamNum	frac2	Areal fraction of soil being saturated for wc_sat * var2	m2
 sharedParamNum	frac3	Areal fraction of soil being saturated for wc_sat * var3; typically 0.5	m2/m2
 sharedParamNum	frac4	Areal fraction of soil being saturated for wc_sat * var4	m2/m2
 sharedParamNum	frac5	Areal fraction of soil being saturated for wc_sat * var5; tyically 1	m2/m2
+# Calibration factors (influencing some of the other parameters by multiplication / summation)
+sharedParamNum	cal_ks	Calibration of saturated hydraulic conductivity; factor	dimensionless
 # Choices
 sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
 sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless

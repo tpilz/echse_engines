@@ -20,10 +20,28 @@ double gw_rch = 0.;
 // sub-surface outflow (m/s)
 double subsurf = 0.;
 
-// scaling of ksat
+// scaling of ksat (as in WASA)
 vector<double> ksat_scale(nh);
+double kfcorr_a = -9999.;
+double kfcorr_b = -9999.;
+double kfcorr = sharedParamNum(scale_ks);
+// implicit choice of scaling method (depending on precipitation or not)
+if( (sharedParamNum(scale_ks_a) > 1e-6) && (delta_t > 3600) ) {
+	kfcorr_a = sharedParamNum(scale_ks_a);
+	kfcorr_b = sharedParamNum(scale_ks_b);
+} else {
+	kfcorr_a = 0.;
+	kfcorr_b = 0.;
+}
+// scaling depending on precipitation in case of daily resolution 
+if(inputExt(precip) > 1e-6) {
+	kfcorr = kfcorr * ( sharedParamNum(scale_ks_a)/inputExt(precip) + sharedParamNum(scale_ks_b) + 1 );
+} else {
+	kfcorr = 1.;
+}
+// update ksat values (and apply calibration factor)
 for (unsigned int i=0; i<nh; i++)
-	ksat_scale[i] = paramFun(ksat,i+1) / sharedParamNum(scale_ks);
+	ksat_scale[i] = paramFun(ksat,i+1) * sharedParamNum(cal_ks) / kfcorr;
 
 // hydraulic properties based on current soil moisture state
 vector<double> ku(nh+1, -9999.);
