@@ -11,8 +11,8 @@ double r_base = -9999.;
 // conceptual linear reservoir storage approach; makes sense only if lateral re-distribution approach by TCs and SVCs is not used (i.e. one SVC per TC per LU)
 if ( abs(sharedParamNum(choice_runconc) - 1.) < 0.01) {
 	// Compute storage constants (s) from calib. parameters
-	double k_surf =  paramNum(str_surf)  * paramNum(ct_index);
-	double k_inter = paramNum(str_inter) * paramNum(ct_index);
+	double k_surf =  sharedParamNum(str_surf)  * paramNum(ct_index);
+	double k_inter = sharedParamNum(str_inter) * paramNum(ct_index);
 
 	// New volumes in the reservoirs (m)
 	v_surf =  v_new(stateScal(vol_surf), k_surf, delta_t, inputSim(r_river_surf));
@@ -37,7 +37,7 @@ if ( sharedParamNum(choice_gw) < 0.01) {
 	r_base = 0.;
 } else if ( abs(sharedParamNum(choice_gw) - 1.) < 0.01) {
 	// simple linear storage approach
-	double k_base =  paramNum(str_base)  * paramNum(ct_index);
+	double k_base =  sharedParamNum(str_base)  * paramNum(ct_index);
 	v_base =  v_new(stateScal(vol_base), k_base, delta_t, inputSim(r_gw_rch)); // calculate groundwater reservoir volume at the end of time step
 	r_base = (inputSim(r_gw_rch) - (v_base - stateScal(vol_base)) / delta_t) * paramNum(frac_area); // groundwater runoff, area-weighted for summation to Subbasin level
 } else {
