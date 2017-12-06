@@ -8,7 +8,7 @@ double v_inter = -9999.;
 double v_base = -9999.;
 double r_base = -9999.;
 
-// conceptual linear reservoir storage approach; makes sense only if lateral re-distribution approach by TCs and SVCs is not used (i.e. one SVC per TC per LU)
+// conceptual linear reservoir storage approach; can also be used in traditional WASA approach to further delay runoff contribution to river (suits well for calibration)
 if ( abs(sharedParamNum(choice_runconc) - 1.) < 0.01) {
 	// Compute storage constants (s) from calib. parameters
 	double k_surf =  sharedParamNum(str_surf)  * paramNum(ct_index);

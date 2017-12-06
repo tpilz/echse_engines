@@ -14,6 +14,12 @@ set_stateScal(runst_surf) = 0.;
 set_stateScal(runst_sub) = 0.;
 set_stateScal(runst_gw) = 0.;
 
+// apply calibration parameters
+vector<double> pores_ind_c(stateVect(wc).size());
+for (unsigned int i=0; i<stateVect(wc).size(); i++) {
+	pores_ind_c[i] = min(1., paramFun(pores_ind,i+1) * sharedParamNum(cal_pores) );
+}
+
 // scaling of ksat (as in WASA)
 vector<double> ksat_scale(stateVect(wc).size());
 double kfcorr_a = -9999.;
@@ -118,14 +124,14 @@ set_stateVect(wc) = wc_a;
 // soil hydraulic head / matric potential / capillary suction (m of water)/(100 hPa)
 vector<double> mat_pot_t(stateVect(wc).size());
 for (unsigned int i=0; i<stateVect(wc).size(); i++)
-	mat_pot_t[i] = matric_pot(sharedParamNum(choice_soilmod), wc_a[i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), paramFun(pores_ind,i+1), paramFun(bubble,i+1), sharedParamNum(na_val));
+	mat_pot_t[i] = matric_pot(sharedParamNum(choice_soilmod), wc_a[i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), pores_ind_c[i], paramFun(bubble,i+1), sharedParamNum(na_val));
 
 set_stateVect(mat_pot) = mat_pot_t;
 
 // hydraulic conductivity (m/s)
 vector<double> ku_t(stateVect(wc).size());
 for (unsigned int i=0; i<stateVect(wc).size(); i++)
-	ku_t[i] = k_unsat(sharedParamNum(choice_soilmod), wc_a[i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), paramFun(pores_ind,i+1), ksat_scale[i], sharedParamNum(na_val));
+	ku_t[i] = k_unsat(sharedParamNum(choice_soilmod), wc_a[i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), pores_ind_c[i], ksat_scale[i], sharedParamNum(na_val));
 
 set_stateVect(k_u) = ku_t;
 
@@ -160,7 +166,7 @@ double f_sat = f_saturation(
 set_output(saturation) = f_sat;
 
 // plant available water within rooted zone (m)
-double const rootdepth = min(inputExt(rootd), paramNum(soil_depth));
+double const rootdepth = min(inputExt(rootd)*sharedParamNum(cal_rootd), paramNum(soil_depth));
 double wc_root = 0.;
 double wcp_root = 0.;
 double cum_depth = 0.;

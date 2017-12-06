@@ -131,6 +131,11 @@ sharedParamNum	frac4	Areal fraction of soil being saturated for wc_sat * var4	m2
 sharedParamNum	frac5	Areal fraction of soil being saturated for wc_sat * var5; tyically 1	m2/m2
 # Calibration factors (influencing some of the other parameters by multiplication / summation)
 sharedParamNum	cal_ks	Calibration of saturated hydraulic conductivity; factor	dimensionless
+sharedParamNum	cal_pores	Calibration of pores_ind; factor	dimensionless
+sharedParamNum	cal_resmin	Calibration of res_leaf_min; factor	dimensionless
+sharedParamNum	cal_rootd	Calibration of rootd; factor	dimensionless
+sharedParamNum	cal_alb	Calibration of alb; factor	dimensionless
+sharedParamNum	cal_intfc	Calibration of intfc; factor	dimensionless
 # Choices
 sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
 sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless

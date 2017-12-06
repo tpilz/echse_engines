@@ -20,6 +20,15 @@ double gw_rch = 0.;
 // sub-surface outflow (m/s)
 double subsurf = 0.;
 
+// apply calibration parameters
+vector<double> pores_ind_c(nh);
+for (unsigned int i=0; i<nh; i++) {
+	pores_ind_c[i] = min(1., paramFun(pores_ind,i+1) * sharedParamNum(cal_pores) );
+}
+double res_min_c = paramNum(res_leaf_min) * sharedParamNum(cal_resmin);
+double alb_c = min(1., inputExt(alb) * sharedParamNum(cal_alb) );
+double intfc_c = paramNum(intfc) * sharedParamNum(cal_intfc);
+
 // scaling of ksat (as in WASA)
 vector<double> ksat_scale(nh);
 double kfcorr_a = -9999.;
@@ -47,15 +56,15 @@ for (unsigned int i=0; i<nh; i++)
 vector<double> ku(nh+1, -9999.);
 vector<double> mat_pot(nh+1, -9999.);
 for (unsigned int i=0; i<nh; i++) {
-	mat_pot[i] = matric_pot(sharedParamNum(choice_soilmod), u[ns+i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), paramFun(pores_ind,i+1), paramFun(bubble,i+1), naval);
-	ku[i] = k_unsat(sharedParamNum(choice_soilmod), u[ns+i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), paramFun(pores_ind,i+1), ksat_scale[i], naval);
+	mat_pot[i] = matric_pot(sharedParamNum(choice_soilmod), u[ns+i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), pores_ind_c[i], paramFun(bubble,i+1), naval);
+	ku[i] = k_unsat(sharedParamNum(choice_soilmod), u[ns+i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), pores_ind_c[i], ksat_scale[i], naval);
 }
 // lower boundary conditions (at the moment free drainage, i.e. unit gradient (water movement due to gravitation) and persistency of conductivity)
 ku[nh] = ku[nh-1];
 mat_pot[nh] = mat_pot[nh-1];
 
 // set effective root depth to total soil depth
-double const rootdepth = min(inputExt(rootd), paramNum(soil_depth));
+double const rootdepth = min(inputExt(rootd)*sharedParamNum(cal_rootd), paramNum(soil_depth));
 
 // water contents (-)
 // top soil water content
@@ -90,7 +99,7 @@ for (unsigned int i=0; i<nh; i++) {
 	wcp_root += paramFun(wc_pwp, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wcr_root += paramFun(wc_res, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	bubble_root += paramFun(bubble, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
-	porei_root += paramFun(pores_ind, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
+	porei_root += pores_ind_c[i] * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 }
 
 // actual plant available water (m)
@@ -116,7 +125,7 @@ for (unsigned int i=0; i<nh; i++) {
 // SURFACE INFLOW (m/s)
 //////////////////////////////////////////////////////////
 // calculate interception of precipitation (m/s)
-double r_inter = intercept(prec_flux, inputExt(lai), paramNum(intfc), max(0., u[INDEX_v_interc]), delta_t);
+double r_inter = intercept(prec_flux, inputExt(lai), intfc_c, max(0., u[INDEX_v_interc]), delta_t);
 
 // calculate soil surface inflow (m/s)
 double in = prec_flux - r_inter + inputSim(r_surf_in);
@@ -196,9 +205,9 @@ double r_etp = et_pot (
 	paramNum(crop_faoref),     				// Crop-factor for FAO reference approach (-)
 	inputExt(cano_height),							// canopy height (m)
 	inputExt(lai),											// leaf area index (m2/m2)
-	inputExt(alb),											// albedo (-)
+	alb_c,											// albedo (-)
 	sharedParamNum(ext),											// Canopy extinction coefficient, Beer's law (-) -  in original WASA model code set to 0.5
-	paramNum(res_leaf_min),						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
+	res_min_c,						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
 	paramNum(soil_dens),								// bulk density of soil of topmost soil horizon (kg/m3)
 	paramNum(glo_half),								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
 	sharedParamNum(res_b),										// Mean boundary layer resistance (sm-1) - in SW and WASA a value of 25
@@ -280,9 +289,9 @@ et_act (
 	paramNum(crop_faoref),     				// Crop-factor for FAO reference approach (-)
 	inputExt(cano_height),							// canopy height (m)
 	inputExt(lai),											// leaf area index (m2/m2)
-	inputExt(alb),											// albedo (-)
+	alb_c,											// albedo (-)
 	sharedParamNum(ext),											// Canopy extinction coefficient, Beer's law (-) -  in original WASA model code set to 0.5
-	paramNum(res_leaf_min),						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
+	res_min_c,						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
 	paramNum(soil_dens),								// bulk density of soil of topmost soil horizon (kg/m3)
 	paramNum(glo_half),								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
 	sharedParamNum(res_b),										// Mean boundary layer resistance (sm-1) - in SW and WASA a value of 25
