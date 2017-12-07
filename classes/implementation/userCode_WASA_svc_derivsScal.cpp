@@ -28,6 +28,10 @@ for (unsigned int i=0; i<nh; i++) {
 double res_min_c = paramNum(res_leaf_min) * sharedParamNum(cal_resmin);
 double alb_c = min(1., inputExt(alb) * sharedParamNum(cal_alb) );
 double intfc_c = paramNum(intfc) * sharedParamNum(cal_intfc);
+double fcorr_a_c = sharedParamNum(fcorr_a) + sharedParamNum(cal_fcorr);
+double fcorr_b_c = sharedParamNum(fcorr_b) - sharedParamNum(cal_fcorr);
+double par_stressHum_c = paramNum(par_stressHum) * sharedParamNum(cal_stresshum);
+double glo_half_c = paramNum(glo_half) * sharedParamNum(cal_glohalf);
 
 // scaling of ksat (as in WASA)
 vector<double> ksat_scale(nh);
@@ -194,8 +198,8 @@ double r_etp = et_pot (
 	sharedParamNum(h_windMeas),							// height of windspeed measurement above ground (m)
 	sharedParamNum(emis_a),									// Coefficient a for calculating net emissivity (-)
 	sharedParamNum(emis_b),									// Coefficient b for calculating net emissivity (-)
-	sharedParamNum(fcorr_a),									// Coefficient a for calculating cloudiness correction factor (-)
-	sharedParamNum(fcorr_b),									// Coefficient b for calculating cloudiness correction factor (-)
+	fcorr_a_c,									// Coefficient a for calculating cloudiness correction factor (-)
+	fcorr_b_c,									// Coefficient b for calculating cloudiness correction factor (-)
 	sharedParamNum(radex_a),									// Angstrom coefficient (share of radex on glorad under clouds) (-)
 	sharedParamNum(radex_b),									// Angstrom coefficient (radex_a+radex_b = share of radex on glorad under clear sky) (-)
 	sharedParamNum(f_day),										// soil heat flux calculation: Fraction of net_rad over daytime (in case of sub-daily application) (-)
@@ -209,7 +213,7 @@ double r_etp = et_pot (
 	sharedParamNum(ext),											// Canopy extinction coefficient, Beer's law (-) -  in original WASA model code set to 0.5
 	res_min_c,						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
 	paramNum(soil_dens),								// bulk density of soil of topmost soil horizon (kg/m3)
-	paramNum(glo_half),								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
+	glo_half_c,								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
 	sharedParamNum(res_b),										// Mean boundary layer resistance (sm-1) - in SW and WASA a value of 25
 	sharedParamNum(drag_coef),								// Effective value of mean drag coef. of vegetative elements (-) - in SG and WASA a value of 0.07
 	sharedParamNum(rough_bare),							// Roughness length of bare substrate (m) - in SW, SG and WASA a value of 0.01
@@ -249,7 +253,7 @@ et_act (
 	porei_root,								// Pore-size-index of the root zone (-)
 	paramNum(wstressmin)*100.,							// Threshold for water stress effect on resistance (begin of stomata closure) (cm) OR (hPa)
 	paramNum(wstressmax)*100.,							// Threshold for water stress effect on resistance (total stomata closure, wilting point) (cm) OR (hPa)
-	paramNum(par_stressHum),						// Parameter to calculate water vapour deficit stomatal conductance stress factor (hPa-1) - in WASA a value of 0.03
+	par_stressHum_c,						// Parameter to calculate water vapour deficit stomatal conductance stress factor (hPa-1) - in WASA a value of 0.03
 // Common meteorological variables
 	inputExt(temper),									// Air temperature (°C)
 	inputExt(temper_min),								// Minimum temperature within time step (°C)
@@ -278,8 +282,8 @@ et_act (
 	sharedParamNum(h_windMeas),							// height of windspeed measurement above ground (m)
 	sharedParamNum(emis_a),									// Coefficient a for calculating net emissivity (-)
 	sharedParamNum(emis_b),									// Coefficient b for calculating net emissivity (-)
-	sharedParamNum(fcorr_a),									// Coefficient a for calculating cloudiness correction factor (-)
-	sharedParamNum(fcorr_b),									// Coefficient b for calculating cloudiness correction factor (-)
+	fcorr_a_c,									// Coefficient a for calculating cloudiness correction factor (-)
+	fcorr_b_c,									// Coefficient b for calculating cloudiness correction factor (-)
 	sharedParamNum(radex_a),									// Angstrom coefficient (share of radex on glorad under clouds) (-)
 	sharedParamNum(radex_b),									// Angstrom coefficient (radex_a+radex_b = share of radex on glorad under clear sky) (-)
 	sharedParamNum(f_day),										// soil heat flux calculation: Fraction of net_rad over daytime (in case of sub-daily application) (-)
@@ -293,7 +297,7 @@ et_act (
 	sharedParamNum(ext),											// Canopy extinction coefficient, Beer's law (-) -  in original WASA model code set to 0.5
 	res_min_c,						// Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf (sm-1)
 	paramNum(soil_dens),								// bulk density of soil of topmost soil horizon (kg/m3)
-	paramNum(glo_half),								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
+	glo_half_c,								// Solar radiation at which stomatal conductance is half of its maximum (W/m2) - in WASA model a value of 100
 	sharedParamNum(res_b),										// Mean boundary layer resistance (sm-1) - in SW and WASA a value of 25
 	sharedParamNum(drag_coef),								// Effective value of mean drag coef. of vegetative elements (-) - in SG and WASA a value of 0.07
 	sharedParamNum(rough_bare),							// Roughness length of bare substrate (m) - in SW, SG and WASA a value of 0.01

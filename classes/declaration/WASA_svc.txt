@@ -136,6 +136,9 @@ sharedParamNum	cal_rootd	Calibration of rootd; factor	dimensionless
 sharedParamNum	cal_alb	Calibration of alb; factor	dimensionless
 sharedParamNum	cal_intfc	Calibration of intfc; factor	dimensionless
 sharedParamNum	cal_etmax	Fraction of field capacity giving the volumetric water content where et_act equals et_pot, typically [0.5..0.8] (wc_etmax = cal_etmax * wc_fk)	dimensionless
+sharedParamNum	cal_fcorr	Calibration of fcorr_a and fcorr_b; additive (as fcorr_a + fcorr_b should be one)	dimensionless
+sharedParamNum	cal_stresshum	Calibration of par_stressHum; factor	dimensionless
+sharedParamNum	cal_glohalf	Calibration of glo_half; factor	dimensionless
 # Choices
 sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
 sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless
