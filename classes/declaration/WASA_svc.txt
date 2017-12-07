@@ -78,7 +78,6 @@ paramNum	bedrock	Bedrock under soil profile: 1: yes, drainage into bedrock limit
 # Vegetation and land-cover
 paramNum	crop_makk	Crop-factor for calculation of pot. evapotransp. after Makkink	dimensionless
 paramNum	crop_faoref	Crop-factor for FAO reference approach	dimensionless
-paramNum	f_etmax	Calibration factor: Fraction of field capacity giving the volumetric water content where et_act equals et_pot, typically [0.5..0.8] (wc_etmax = f_etmax * wc_fk)	dimensionless
 paramNum	intfc	Interception capacity per unit LAI	m
 paramNum	res_leaf_min	Plant-specific minimum (i.e. no stress occurs) stomatal resistance of a single leaf	sm-1
 paramNum	wstressmin	Matric potential threshold for water stress effect on resistance (begin of stomata closure)	m of water or 100 hPa
@@ -136,6 +135,7 @@ sharedParamNum	cal_resmin	Calibration of res_leaf_min; factor	dimensionless
 sharedParamNum	cal_rootd	Calibration of rootd; factor	dimensionless
 sharedParamNum	cal_alb	Calibration of alb; factor	dimensionless
 sharedParamNum	cal_intfc	Calibration of intfc; factor	dimensionless
+sharedParamNum	cal_etmax	Fraction of field capacity giving the volumetric water content where et_act equals et_pot, typically [0.5..0.8] (wc_etmax = cal_etmax * wc_fk)	dimensionless
 # Choices
 sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
 sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless

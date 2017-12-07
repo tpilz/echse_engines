@@ -244,11 +244,11 @@ et_act (
 	wcs_root,									// Volumetric water content at saturation of the root zone (m3/m3)
 	wcp_root,									// Volumetric water content of the root zone at permanent wilting point (m3/m3)
 	wcr_root,									// Residual volumetric water content of the root zone (m3/m3)
-	paramNum(f_etmax)*wcf_root,								// Parameter giving the volumetric water content where et_act equals et_pot, typically wc_etmax / wc_fk = [0.5..0.8] (m3/m3)
+	sharedParamNum(cal_etmax)*wcf_root,			// Parameter giving the volumetric water content where et_act equals et_pot, typically wc_etmax / wc_fk = [0.5..0.8] (m3/m3)
 	bubble_root*100.,									// Bubbling pressure of the root zone (cm) or (hPa)
 	porei_root,								// Pore-size-index of the root zone (-)
-	paramNum(wstressmin)*100.,							// Threshold for water stress effect on resistance (begin of stomata closure) (m) OR (100 hPa)
-	paramNum(wstressmax)*100.,							// Threshold for water stress effect on resistance (total stomata closure, wilting point) (m) OR (100 hPa)
+	paramNum(wstressmin)*100.,							// Threshold for water stress effect on resistance (begin of stomata closure) (cm) OR (hPa)
+	paramNum(wstressmax)*100.,							// Threshold for water stress effect on resistance (total stomata closure, wilting point) (cm) OR (hPa)
 	paramNum(par_stressHum),						// Parameter to calculate water vapour deficit stomatal conductance stress factor (hPa-1) - in WASA a value of 0.03
 // Common meteorological variables
 	inputExt(temper),									// Air temperature (°C)
