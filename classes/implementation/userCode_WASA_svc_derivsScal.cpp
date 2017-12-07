@@ -84,6 +84,7 @@ double wc_plant = 0.;
 double bubble_root = 0.;
 double porei_root = 0.;
 double cum_depth = 0.;
+vector<double> wc_actplant(nh);
 vector<double> w_root(nh);
 vector<double> w_eta(nh); // needed later to relate total evapotranspiration to horizons
 for (unsigned int i=0; i<nh; i++) {
@@ -96,7 +97,8 @@ for (unsigned int i=0; i<nh; i++) {
 	else
 		w_root[i] = 0.;
 	// calc water content and parameters for root zone
-	wc_plant += max(0., u[ns+i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
+	wc_actplant[i] = min(paramFun(wc_fc, i+1), u[ns+i]); // plant available water content limited to field capacity
+	wc_plant += max(0., wc_actplant[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wc_root += u[ns+i] * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wcs_root += paramFun(wc_sat, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wcf_root += paramFun(wc_fc, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
@@ -117,7 +119,7 @@ for (unsigned int i=0; i<nh; i++) {
 		else
 			w_eta[i] = 0.;
 	else {
-		plant_wat =  max(0., (u[ns+i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) );
+		plant_wat =  max(0., (wc_actplant[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) );
 		w_eta[i] = plant_wat / wv_plant;
 	}
 }

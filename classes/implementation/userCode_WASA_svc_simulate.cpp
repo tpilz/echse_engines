@@ -173,6 +173,7 @@ double cum_depth = 0.;
 double wv_plant = -9999.;
 double wv_soil = 0.;
 double wc_plant = 0.;
+vector<double> wc_actplant(wc_a.size());
 vector<double> w_root(wc_a.size());
 vector<double> w_eta_t(wc_a.size());
 for (unsigned int i=0; i<wc_a.size(); i++) {
@@ -185,7 +186,8 @@ for (unsigned int i=0; i<wc_a.size(); i++) {
 	else
 		w_root[i] = 0.;
 	// calc plant available water content and parameters for root zone
-	wc_plant += max(0., wc_a[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
+	wc_actplant[i] = min(paramFun(wc_fc, i+1), wc_a[i]); // plant available water content limited to field capacity
+	wc_plant += max(0., wc_actplant[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wc_root += wc_a[i] * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	wcp_root += paramFun(wc_pwp, i+1) * w_root[i] * paramFun(hor_depth, i+1) / rootdepth;
 	// total water in soil profile
@@ -202,7 +204,7 @@ for (unsigned int i=0; i<wc_a.size(); i++) {
 		else
 			w_eta_t[i] = 0.;
 	else {
-		plant_wat =  max(0., (wc_a[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) );
+		plant_wat =  max(0., (wc_actplant[i] - paramFun(wc_pwp, i+1)) * w_root[i] * paramFun(hor_depth, i+1) );
 		w_eta_t[i] = plant_wat / wv_plant;
 	}
 }
