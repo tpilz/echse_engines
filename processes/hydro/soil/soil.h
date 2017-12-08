@@ -101,10 +101,17 @@ double matric_pot (
 	}
 	
 	
-// ERROR if inf_pot_sum still na_val
+// ERROR if inf_pot_sum still na_val or negative
 	if( abs(suction - na_val) < 0.01 ) {
 		stringstream errmsg;
 		errmsg << "Could not calculate matric potential: Value of choice parameter not supported, must be one of {1,2,3}!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+
+	if( suction < 0. ) {
+		stringstream errmsg;
+		errmsg << "Calculated matric potential is negative!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
@@ -187,10 +194,17 @@ double k_unsat (
 	}
 	
 	
-// ERROR if inf_pot_sum still na_val
+// ERROR if inf_pot_sum still na_val or negative
 	if( abs(k_u - na_val) < 0.01 ) {
 		stringstream errmsg;
 		errmsg << "Could not calculate hydraulic conductivity: Value of choice parameter not supported, must be one of {1,2,3}!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+
+	if( k_u < 0. ) {
+		stringstream errmsg;
+		errmsg << "Calculated hydraulic conductivity is negative!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
@@ -407,28 +421,28 @@ double percolation(
 		
 		// conductivity (weighted mean of current and lower soil layer) (m/s)
 		double ku_m = w1*ku + w2*ku_n;
-		//double ku_m = 2.*ku*ku_n / (ku + ku_n);
+
 		
 		// calculate flow rate (m/s)
-		perc_out = ku_m * ( (mat_pot_n - mat_pot) / hor_dist + 1. );
-		
-// 		if( perc_out < 0. ) {
-// 			stringstream errmsg;
-// 			errmsg << "Calculated percolation rate is negative! mat_pot = " << mat_pot << ", mat_pot_n = " << mat_pot_n << ", ku_m = " << ku_m;
-// 			except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 			throw(e); 
-// 		}
+		perc_out = max(0., ku_m * ( (mat_pot_n - mat_pot) / hor_dist + 1. ) );
 	}
 	
 	
-// ERROR if inf_pot_sum still na_val
+	// ERROR if inf_pot_sum still na_val
 	if( abs(perc_out + 9999.) < 0.01 ) {
 		stringstream errmsg;
 		errmsg << "Could not calculate percolation: Value of choice parameter not supported, must be one of {1,2}!";
 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e);
+	}
+
+	// eror if less than zero
+	if( perc_out < 0. ) {
+		stringstream errmsg;
+		errmsg << "Calculated percolation rate is negative!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
 		throw(e); 
 	}
-	
 	
 	
 	return( perc_out );
