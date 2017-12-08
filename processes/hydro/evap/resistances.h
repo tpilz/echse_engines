@@ -247,7 +247,7 @@ double stress_soilwater(
 	if(suction < wstressmin)	// no water stress
 		return(1.);
 	else if(suction >= wstressmax)	// maximum water stress
-		return(0.01); // minimum stress factor (at maximum water stress) as defined in WASA
+		return(0.); // minimum stress factor (in WASA this is 0.01 but according to Hanan and Prince (1997) the lower limit is zero)
 	else	// between begin of and total stomatal closure
 		return( 1. - (suction - wstressmin) / (wstressmax - wstressmin) );
 }
