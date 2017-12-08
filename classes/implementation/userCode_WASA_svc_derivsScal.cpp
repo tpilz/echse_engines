@@ -48,7 +48,7 @@ if( (sharedParamNum(scale_ks_a) > 1e-6) && (delta_t > 3600) ) {
 }
 // scaling depending on precipitation in case of daily resolution 
 if(inputExt(precip) > 1e-6) {
-	kfcorr = kfcorr * ( sharedParamNum(scale_ks_a)/inputExt(precip) + sharedParamNum(scale_ks_b) + 1 );
+	kfcorr = kfcorr * ( kfcorr_a/inputExt(precip) + kfcorr_b + 1 );
 } else {
 	kfcorr = 1.;
 }
@@ -326,24 +326,26 @@ et_act (
 
 // SW approach was selected, divide eta into flux from bare soil and vegetation
 if ( abs(sharedParamNum(choice_et) - 13.) < 0.01 ) {
-	// limit to water content available for evaporation
-	// TODO: shouldn't that implicitly be done by scaling of resistance parameters? But still more water is substracted from the soil than is available. Maybe a numerical (or resolution) problem?!
-	double wc_et = max(min(wc_top, paramFun(wc_sat, 1)), paramFun(wc_res, 1)) - paramFun(wc_res, 1);
-	r_etas = min(r_etas, wc_et * paramFun(hor_depth,1)/delta_t);
-	//r_etas = 0.;
+	if (sharedParamNum(choice_constraint) > 0.01 ) {
+		// limit evaporation to physical boundaries
+		double wc_et = max(min(wc_top, paramFun(wc_sat, 1)), paramFun(wc_res, 1)) - paramFun(wc_res, 1);
+		r_etas = min(r_etas, wc_et * paramFun(hor_depth,1)/delta_t);
+	}
 	// update soil moisture of uppermost horizon
 	flows[0] -= r_etas;
-	// limit to actual usable field capacity of root zone
-	// TODO: shouldn't that implicitly be done by scaling of resistance parameters? But still more water is substracted from the soil than is available. Maybe a numerical (or resolution) problem?!
-	double wc_nfc = min(wc_root, wcf_root);
-	wc_nfc = max(wc_nfc - wcp_root, 0.);
-	r_etac = min(r_etac, wc_nfc*rootdepth/delta_t);
 	// treat r_etac like r_eta for the other approaches
 	r_eta = r_etac;
 }
 
 // first evaporates interception storage; may limit actual et
 r_eta = min(r_eta, r_etp - r_eti);
+
+if (sharedParamNum(choice_constraint) > 0.01 ) {
+	// limit transpiration to actual usable field capacity of root zone
+	double wc_nfc = min(wc_root, wcf_root);
+	wc_nfc = max(wc_nfc - wcp_root, 0.);
+	r_etac = min(r_etac, wc_nfc*rootdepth/delta_t);
+}
 
 // distribute flux of actual et to rooted horizons, according to actual plant available water in each horizon
 for (unsigned int i=0; i<nh; i++)
@@ -386,7 +388,7 @@ double inf = infiltration(
 // General input and parameters
 	sharedParamNum(choice_inf),			// Choice flag for selection of method
 	in,													// Water hitting top of soil to be infiltrated (ms-1)
-	max(min(u[ns], paramFun(wc_sat,1)), paramFun(wc_res,1)),											// Actual volumetric water content at start of infiltration (m3/m3)
+	max(min(u[ns], paramFun(wc_sat,1)), paramFun(wc_res,1)),	// Actual volumetric water content at start of infiltration (m3/m3)
 	paramFun(wc_sat,1),					// Volumetric water content at saturation (m3/m3)
 	ksat_scale[0],						// Saturated hydraulic conductivity (ms-1)
 	delta_t,										// time step length (s)
@@ -417,8 +419,8 @@ double surf_inf = in - inf;
 // lateral flows for every horizon
 double perc = -9999.;
 double latfl = -9999.;
-//double r_sum_flows = -9999.;
-//double r_water_free = -9999.;
+double r_sum_flows = -9999.;
+double r_water_free = -9999.;
 double hor_depth_next = -9999.;
 for (unsigned int i=0; i<nh; i++) {
 	
@@ -453,16 +455,18 @@ for (unsigned int i=0; i<nh; i++) {
 	
 	// check outflows (latflow and percolation); only saturation exccess (wc-wc_fc) can flow out due to gravitation
 	// based on Guentner (2002) eqs. 4.47 and 4.48; ATTENTION: the latter is erroneous (but correct in WASA code)!
-// 	r_sum_flows = (latfl + perc) * delta_t; // estimated total outflow
-// 	if( r_sum_flows > 0. ) {
-// 		// maximum possible outflow
-// 		r_water_free = paramFun(hor_depth,i+1) * (u[ns+i] - paramFun(wc_fc,i+1));
-// 		// if estimated outflow greater than possible reduce outflows accordingly
-// 		if(r_sum_flows > r_water_free) {
-// 			perc *= r_water_free / r_sum_flows;
-// 			latfl *= r_water_free / r_sum_flows;
-// 		}
-// 	}
+	if (sharedParamNum(choice_constraint) > 0.01 ) {
+		r_sum_flows = (latfl + perc) * delta_t; // estimated total outflow (m)
+		if( r_sum_flows > 0. ) {
+			// maximum possible outflow
+			r_water_free = paramFun(hor_depth,i+1) * max(0., u[ns+i] - paramFun(wc_fc,i+1));
+			// if estimated outflow greater than possible reduce outflows accordingly
+			if(r_sum_flows > r_water_free) {
+				perc *= r_water_free / r_sum_flows;
+				latfl *= r_water_free / r_sum_flows;
+			}
+		}
+	}
 	
 	
 	// add to flow vector (percolation to groundwater recharge if last horizon)
@@ -482,57 +486,57 @@ for (unsigned int i=0; i<nh; i++) {
 //////////////////////////////////////////////////////////
 // CHECK FLOWS
 //////////////////////////////////////////////////////////
-// if( (abs(surf_sat - naval) < 0.01) || !isfinite(surf_sat) || (surf_sat < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated saturation excess surface runoff: surf_sat = " << surf_sat;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(surf_inf - naval) < 0.01) || !isfinite(surf_inf) || (surf_inf < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated infiltration excess surface runoff: surf_inf = " << surf_inf;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(subsurf - naval) < 0.01) || !isfinite(subsurf) || (subsurf < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated subsurface runoff: subsurf = " << subsurf;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(gw_rch - naval) < 0.01) || !isfinite(gw_rch) || (gw_rch < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated groundwater recharge: gw_rch = " << gw_rch;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(r_eta - naval) < 0.01) || !isfinite(r_eta) || (r_eta < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated actual evapotranspiration: r_eta = " << r_eta;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(r_etp - naval) < 0.01) || !isfinite(r_etp) || (r_etp < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated potential evapotranspiration: r_etp = " << r_etp;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// if( (abs(r_eti - naval) < 0.01) || !isfinite(r_eti) || (r_eti < -1e-10) ) {
-// 	stringstream errmsg;
-// 	errmsg << "Problem with calculated interception evaporation: r_eti = " << r_eti << ", v_interc = " << u[INDEX_v_interc] << ", r_inter = " << r_inter << ", r_etp = " << r_etp << ", r_eta = " << r_eta;
-// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 	throw(e); 
-// }
-// 
-// for (unsigned int i=0; i<nh; i++) {
-// 	if( (abs(flows[i] - naval) < 0.01) || !isfinite(flows[i])) {
-// 		stringstream errmsg;
-// 		errmsg << "Calculated flow is NA or not finite!";
-// 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-// 		throw(e); 
-// 	}
-// }
+if( (abs(surf_sat - naval) < 0.01) || !isfinite(surf_sat) || (surf_sat < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated saturation excess surface runoff: surf_sat = " << surf_sat;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(surf_inf - naval) < 0.01) || !isfinite(surf_inf) || (surf_inf < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated infiltration excess surface runoff: surf_inf = " << surf_inf;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(subsurf - naval) < 0.01) || !isfinite(subsurf) || (subsurf < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated subsurface runoff: subsurf = " << subsurf;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(gw_rch - naval) < 0.01) || !isfinite(gw_rch) || (gw_rch < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated groundwater recharge: gw_rch = " << gw_rch;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(r_eta - naval) < 0.01) || !isfinite(r_eta) || (r_eta < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated actual evapotranspiration: r_eta = " << r_eta;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(r_etp - naval) < 0.01) || !isfinite(r_etp) || (r_etp < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated potential evapotranspiration: r_etp = " << r_etp;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+if( (abs(r_eti - naval) < 0.01) || !isfinite(r_eti) || (r_eti < -1e-10) ) {
+	stringstream errmsg;
+	errmsg << "Problem with calculated interception evaporation: r_eti = " << r_eti << ", v_interc = " << u[INDEX_v_interc] << ", r_inter = " << r_inter << ", r_etp = " << r_etp << ", r_eta = " << r_eta;
+	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+	throw(e); 
+}
+
+for (unsigned int i=0; i<nh; i++) {
+	if( (abs(flows[i] - naval) < 0.01) || !isfinite(flows[i])) {
+		stringstream errmsg;
+		errmsg << "Calculated flow is NA or not finite!";
+		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+		throw(e); 
+	}
+}
 
 
 //////////////////////////////////////////////////////////

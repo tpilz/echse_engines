@@ -152,6 +152,7 @@ sharedParamNum	choice_soilmod	Choice: soil water retention and conductivity mode
 sharedParamNum	na_val	All input and parameters of this specific numeric value will be treated as 'not available'	dimensionless
 sharedParamNum	ode_accuracy	Accuracy required from ode solver (i.e. absolute error)	unit of state variable
 sharedParamNum	ode_max_iter	Maximum number of sub-steps	dimensionless
+sharedParamNum	choice_constraint	Choice: 0 - May produce physically unreasonable state solutions due to integration errors but preferred in terms of mathematics; 1 - Constrain solutions to physical boundaries (reasonable solutions but violates mathematics)	dimensionless
 sharedParamNum	choice_odesolve	Choice: method for numerical integration	dimensionless
 
 

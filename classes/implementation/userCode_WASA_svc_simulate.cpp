@@ -35,7 +35,7 @@ if( (sharedParamNum(scale_ks_a) > 1e-6) && (delta_t > 3600) ) {
 }
 // scaling depending on precipitation in case of daily resolution 
 if(inputExt(precip) > 1e-6) {
-	kfcorr = kfcorr * ( sharedParamNum(scale_ks_a)/inputExt(precip) + sharedParamNum(scale_ks_b) + 1 );
+	kfcorr = kfcorr * ( kfcorr_a/inputExt(precip) + kfcorr_b + 1 );
 } else {
 	kfcorr = 1.;
 }
@@ -115,8 +115,15 @@ if(stateScal(runst_sub) < -1e-6) {
 	throw(e); 
 }
 
-for (unsigned int i=0; i<stateVect(wc).size(); i++)
+// actual water content (m3/m3)
+for (unsigned int i=0; i<stateVect(wc).size(); i++) {
 	wc_a[i] = states_all[stateScal_all().size()+i];
+	// limit water content within physical boundaries
+	if(sharedParamNum(choice_constraint) > 0.01 ) {
+		wc_a[i] = max(wc_a[i], paramFun(wc_res,i+1));
+		wc_a[i] = min(wc_a[i], paramFun(wc_sat,i+1));
+	}
+}
 
 set_stateVect(wc) = wc_a;
 
