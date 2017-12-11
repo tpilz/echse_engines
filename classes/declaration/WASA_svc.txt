@@ -75,6 +75,7 @@ paramNum	soil_dens	Bulk density of top horizon of soil (where evaporation occurs
 paramNum	slopelength	Average slopelength of soil unit (in flow direction)	m
 paramNum	slope	Average slope of soil unit (in flow direction)	m/m
 paramNum	bedrock	Bedrock under soil profile: 1: yes, drainage into bedrock limited by conductivity of bedrock; 0: no, free drainage below soil profile (matric pot. gradient zero; persistence of conductivity of last soil layer)	dimensionless
+paramNum	kf_bedrock	Conductivity of bedrock; used if bedrock = 1 (see above)	m/s
 # Vegetation and land-cover
 paramNum	crop_makk	Crop-factor for calculation of pot. evapotransp. after Makkink	dimensionless
 paramNum	crop_faoref	Crop-factor for FAO reference approach	dimensionless
@@ -139,6 +140,7 @@ sharedParamNum	cal_etmax	Fraction of field capacity giving the volumetric water 
 sharedParamNum	cal_fcorr	Calibration of fcorr_a and fcorr_b; additive (as fcorr_a + fcorr_b should be one)	dimensionless
 sharedParamNum	cal_stresshum	Calibration of par_stressHum; factor	dimensionless
 sharedParamNum	cal_glohalf	Calibration of glo_half; factor	dimensionless
+sharedParamNum	cal_kfbed	Calibration of kf_bedrock; factor	dimensionless
 # Choices
 sharedParamNum	choice_et	Flag indicating which method for calculation of evapotransp. to use (see documentation)	dimensionless
 sharedParamNum	choice_rcs	Canopy stomatal resistance by up-scaling of single leaf resistance, 1: Shuttlewort & Wallace (1985) eq. 19, 2: Saugier and Katerji (1991) eq. 4 used in WASA	dimensionless

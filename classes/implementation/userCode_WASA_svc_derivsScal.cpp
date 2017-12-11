@@ -32,6 +32,7 @@ double fcorr_a_c = sharedParamNum(fcorr_a) + sharedParamNum(cal_fcorr);
 double fcorr_b_c = sharedParamNum(fcorr_b) - sharedParamNum(cal_fcorr);
 double par_stressHum_c = paramNum(par_stressHum) * sharedParamNum(cal_stresshum);
 double glo_half_c = paramNum(glo_half) * sharedParamNum(cal_glohalf);
+double kf_bedrock_c = paramNum(kf_bedrock) * sharedParamNum(cal_kfbed);
 
 // scaling of ksat (as in WASA)
 vector<double> ksat_scale(nh);
@@ -472,6 +473,10 @@ for (unsigned int i=0; i<nh; i++) {
 	// add to flow vector (percolation to groundwater recharge if last horizon)
 	subsurf += latfl;
 	if (i == (nh-1)) {
+		// if there is bedrock, simply limit percolation by bedrock conductivity (as in WASA)
+		if(paramNum(bedrock) > 0.1)
+			perc = min(perc, kf_bedrock_c);
+		
 		flows[i] -= (perc+latfl);
 		gw_rch += perc;
 	} else {
