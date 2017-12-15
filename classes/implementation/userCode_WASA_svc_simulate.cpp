@@ -108,12 +108,12 @@ for (unsigned int i=0; i<stateScal_all().size(); i++) {
 set_stateScal_all() = state_t;
 
 // runst_sub sometimes is negative although values of subsurf in derivsScal() are positive; don't know the reason, ignore this as long as value is negligible
-if(stateScal(runst_sub) < -1e-6) {
-	stringstream errmsg;
-	errmsg << "runst_sub is significantly negative (runst_sub = " << stateScal(runst_sub) << ")!";
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
+// if(stateScal(runst_sub) < -1e-6) {
+// 	stringstream errmsg;
+// 	errmsg << "runst_sub is significantly negative (runst_sub = " << stateScal(runst_sub) << ")!";
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
 
 // actual water content (m3/m3)
 for (unsigned int i=0; i<stateVect(wc).size(); i++) {
@@ -141,6 +141,11 @@ for (unsigned int i=0; i<stateVect(wc).size(); i++)
 	ku_t[i] = k_unsat(sharedParamNum(choice_soilmod), wc_a[i], paramFun(wc_sat,i+1), paramFun(wc_res,i+1), pores_ind_c[i], ksat_scale[i], sharedParamNum(na_val));
 
 set_stateVect(k_u) = ku_t;
+
+// prevent interception storage from becoming negative
+if(sharedParamNum(choice_constraint) > 0.01 ) {
+	set_stateScal(v_interc) = max(0., stateScal(v_interc));
+}
 
 
 

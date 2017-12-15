@@ -238,7 +238,7 @@ double r_etp = et_pot (
 );
 
 // interception evaporation rate (m/s)
-double r_eti = min(r_etp, u[INDEX_v_interc]/delta_t);
+double r_eti = max(0., min(r_etp, u[INDEX_v_interc]/delta_t));
 
 // actual evapotranspiration (m/s)
 double r_eta = -9999.;
@@ -491,57 +491,57 @@ for (unsigned int i=0; i<nh; i++) {
 //////////////////////////////////////////////////////////
 // CHECK FLOWS
 //////////////////////////////////////////////////////////
-if( (abs(surf_sat - naval) < 0.01) || !isfinite(surf_sat) || (surf_sat < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated saturation excess surface runoff: surf_sat = " << surf_sat;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(surf_inf - naval) < 0.01) || !isfinite(surf_inf) || (surf_inf < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated infiltration excess surface runoff: surf_inf = " << surf_inf;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(subsurf - naval) < 0.01) || !isfinite(subsurf) || (subsurf < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated subsurface runoff: subsurf = " << subsurf;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(gw_rch - naval) < 0.01) || !isfinite(gw_rch) || (gw_rch < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated groundwater recharge: gw_rch = " << gw_rch;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(r_eta - naval) < 0.01) || !isfinite(r_eta) || (r_eta < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated actual evapotranspiration: r_eta = " << r_eta;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(r_etp - naval) < 0.01) || !isfinite(r_etp) || (r_etp < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated potential evapotranspiration: r_etp = " << r_etp;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
-if( (abs(r_eti - naval) < 0.01) || !isfinite(r_eti) || (r_eti < -1e-10) ) {
-	stringstream errmsg;
-	errmsg << "Problem with calculated interception evaporation: r_eti = " << r_eti << ", v_interc = " << u[INDEX_v_interc] << ", r_inter = " << r_inter << ", r_etp = " << r_etp << ", r_eta = " << r_eta;
-	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-	throw(e); 
-}
+// if( (abs(surf_sat - naval) < 0.01) || !isfinite(surf_sat) || (surf_sat < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated saturation excess surface runoff: surf_sat = " << surf_sat;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(surf_inf - naval) < 0.01) || !isfinite(surf_inf) || (surf_inf < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated infiltration excess surface runoff: surf_inf = " << surf_inf;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(subsurf - naval) < 0.01) || !isfinite(subsurf) || (subsurf < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated subsurface runoff: subsurf = " << subsurf;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(gw_rch - naval) < 0.01) || !isfinite(gw_rch) || (gw_rch < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated groundwater recharge: gw_rch = " << gw_rch;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(r_eta - naval) < 0.01) || !isfinite(r_eta) || (r_eta < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated actual evapotranspiration: r_eta = " << r_eta;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(r_etp - naval) < 0.01) || !isfinite(r_etp) || (r_etp < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated potential evapotranspiration: r_etp = " << r_etp;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
+// if( (abs(r_eti - naval) < 0.01) || !isfinite(r_eti) || (r_eti < -1e-10) ) {
+// 	stringstream errmsg;
+// 	errmsg << "Problem with calculated interception evaporation: r_eti = " << r_eti << ", v_interc = " << u[INDEX_v_interc] << ", r_inter = " << r_inter << ", r_etp = " << r_etp << ", r_eta = " << r_eta;
+// 	except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 	throw(e); 
+// }
 
-for (unsigned int i=0; i<nh; i++) {
-	if( (abs(flows[i] - naval) < 0.01) || !isfinite(flows[i])) {
-		stringstream errmsg;
-		errmsg << "Calculated flow is NA or not finite!";
-		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
-		throw(e); 
-	}
-}
+// for (unsigned int i=0; i<nh; i++) {
+// 	if( (abs(flows[i] - naval) < 0.01) || !isfinite(flows[i])) {
+// 		stringstream errmsg;
+// 		errmsg << "Calculated flow is NA or not finite!";
+// 		except e(__PRETTY_FUNCTION__,errmsg,__FILE__,__LINE__);
+// 		throw(e); 
+// 	}
+// }
 
 
 //////////////////////////////////////////////////////////
