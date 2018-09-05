@@ -137,6 +137,7 @@ sharedParamNum	cal_rootd	Calibration of rootd; factor	dimensionless
 sharedParamNum	cal_alb	Calibration of alb; factor	dimensionless
 sharedParamNum	cal_intfc	Calibration of intfc; factor	dimensionless
 sharedParamNum	cal_etmax	Fraction of field capacity giving the volumetric water content where et_act equals et_pot, typically [0.5..0.8] (wc_etmax = cal_etmax * wc_fk)	dimensionless
+sharedParamNum	cal_wind	Factor to adjust input of wind speed. Use this to calibrate et when using a dummy as wind input, as in original WASA (only approaches which use wind speed as input)	dimensionless
 sharedParamNum	cal_fcorr	Calibration of fcorr_a and fcorr_b; additive (as fcorr_a + fcorr_b should be one)	dimensionless
 sharedParamNum	cal_stresshum	Calibration of par_stressHum; factor	dimensionless
 sharedParamNum	cal_glohalf	Calibration of glo_half; factor	dimensionless
