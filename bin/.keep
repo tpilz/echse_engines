@@ -1,0 +1,1 @@
+This files serves that the empty directory is kept in git (otherwise echse_build produces an error, which might be confusing to new users).

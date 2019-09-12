@@ -1,6 +1,7 @@
 
 # Generated files
 bin/*
+!bin/.keep
 generated/*/*.*
 
 # Backup files
