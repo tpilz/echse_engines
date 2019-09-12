@@ -221,7 +221,7 @@ for (unsigned int i=0; i<wc_a.size(); i++) {
 	}
 }
 
-double vect_sum = accumulate(w_eta_t.begin(), w_eta_t.end(), 0.);
+double vect_sum = std::accumulate(w_eta_t.begin(), w_eta_t.end(), 0.);
 if( abs(vect_sum - 1.) > 1e-12 ) {
 	stringstream errmsg;
 	errmsg << "Sum of w_eta = " << vect_sum << " but should be equal to one!";
